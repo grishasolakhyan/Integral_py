@@ -1,10 +1,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QMessageBox
 import numpy as np
 import matplotlib.pyplot as plt
 import math
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1200, 600)
         MainWindow.setStyleSheet("")
@@ -25,6 +27,7 @@ class Ui_MainWindow(object):
         self.bord_b.setObjectName("bord_b")
 
         self.num_seg = QtWidgets.QSlider(self.centralwidget)
+
         min_seg=2
         max_seg=100
 
