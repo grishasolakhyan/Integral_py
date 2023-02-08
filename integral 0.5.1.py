@@ -143,9 +143,6 @@ class Ui_MainWindow(object):
             xa=xbn
         return xa, xb
 
-    def write_result(self):
-        tx = self.equation.toPlainText()
-
     def update_NumSeg(self):
         self.text_seg.setText(str(self.num_seg.value()))
         val = self.num_seg.value()
@@ -198,8 +195,6 @@ class Ui_MainWindow(object):
         self.result_rect.setText(str(r_res))
         self.result_trap.setText(str(t_res))
         self.result_Simp.setText(str(s_res))
-
-        print(self.equation.toPlainText())
         return 0
 
     def draw_graph(self):
