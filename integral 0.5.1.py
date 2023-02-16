@@ -128,12 +128,28 @@ class Ui_MainWindow(object):
         self.btn_integral.clicked.connect(lambda: self.Integral())
         self.num_seg.valueChanged.connect(self.update_NumSeg)
 
+    def check_equation(self):
+        c_equa = self.equation.toPlainText()
+        if not c_equa or c_equa.isspace():
+            return False
+        else:
+            return True
+
+    def error_equation(self):
+        error = QMessageBox()
+        error.setWindowTitle("Ошибка")
+        error.setText("Не указано уравнение функции!")
+        error.setIcon(QMessageBox.Warning)
+        error.setStandardButtons(QMessageBox.Close)
+        error.exec_()
+        return 0
+
     def func(self, x):
         equa = self.equation.toPlainText()
         ev=eval(equa)
         return ev
 
-    def int_boards(self):
+    def int_borders(self):
         xa = float(self.bord_a.toPlainText())
         xb = float(self.bord_b.toPlainText())
 
@@ -149,7 +165,7 @@ class Ui_MainWindow(object):
         return val
 
     def rectangle(self):
-        xa, xb = self.int_boards()
+        xa, xb = self.int_borders()
         n = self.update_NumSeg()
         sum = 0
         h = (xb - xa) / n
@@ -160,7 +176,7 @@ class Ui_MainWindow(object):
         return sum * h
 
     def trapezium(self):
-        xa, xb = self.int_boards()
+        xa, xb = self.int_borders()
         n = self.update_NumSeg()
         sum = 0
         h = (xb - xa) / n
@@ -172,7 +188,7 @@ class Ui_MainWindow(object):
         return sum * h
 
     def Simpson(self):
-        xa, xb = self.int_boards()
+        xa, xb = self.int_borders()
         n = self.update_NumSeg()
         sum=0
         btx = xa
@@ -188,32 +204,39 @@ class Ui_MainWindow(object):
         return sum
 
     def Integral(self):
-        r_res = self.rectangle()
-        t_res = self.trapezium()
-        s_res = self.Simpson()
+        check_r = self.check_equation()
+        if check_r == False:
+            self.error_equation()
+        else:
+            r_res = self.rectangle()
+            t_res = self.trapezium()
+            s_res = self.Simpson()
 
-        self.result_rect.setText(str(r_res))
-        self.result_trap.setText(str(t_res))
-        self.result_Simp.setText(str(s_res))
+            self.result_rect.setText(str(r_res))
+            self.result_trap.setText(str(t_res))
+            self.result_Simp.setText(str(s_res))
         return 0
 
     def draw_graph(self):
-        xa, xb = self.int_boards()
-        vl = self.update_NumSeg()
+        check_r = self.check_equation()
+        if check_r == False:
+            self.error_equation()
+        else:
+            xa, xb = self.int_borders()
 
-        fig = plt.figure()
-        fig.patch.set_facecolor('#4a5b67')
-        fig.patch.set_alpha(1)
+            fig = plt.figure()
+            fig.patch.set_facecolor('#4a5b67')
+            fig.patch.set_alpha(1)
 
-        ax = fig.add_subplot(111)
-        ax.patch.set_alpha(0.0)
+            ax = fig.add_subplot(111)
+            ax.patch.set_alpha(0.0)
 
-        t=np.linspace(xa, xb)
-        y=self.func(t)
-        plt.plot(t, y, color='#ffa1c0')
-        plt.fill_between(t, y, np.zeros_like(y), color='#bd305b')
-        plt.grid()
-        plt.show()
+            t=np.linspace(xa, xb)
+            y=self.func(t)
+            plt.plot(t, y, color='#ffa1c0')
+            plt.fill_between(t, y, np.zeros_like(y), color='#bd305b')
+            plt.grid()
+            plt.show()
 
 
 if __name__ == "__main__":
