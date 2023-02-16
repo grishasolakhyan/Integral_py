@@ -128,14 +128,14 @@ class Ui_MainWindow(object):
         self.btn_integral.clicked.connect(lambda: self.Integral())
         self.num_seg.valueChanged.connect(self.update_NumSeg)
 
-    def check_equation(self): #функция проверки на пустоту строки уравнения
+    def check_empty_equation(self): #функция проверки на пустоту строки уравнения
         c_equa = self.equation.toPlainText()
         if not c_equa or c_equa.isspace():
             return False
         else:
             return True
 
-    def error_equation(self): #функция вывода ошибки пустой строки уравнения
+    def error_empty_equation(self): #функция вывода ошибки пустой строки уравнения
         error_equa = QMessageBox()
         error_equa.setWindowTitle("Ошибка")
         error_equa.setText("Не указано уравнение функции!")
@@ -144,7 +144,7 @@ class Ui_MainWindow(object):
         error_equa.exec_()
         return 0
 
-    def check_borders(self): #функция проверки на пустоту строк границ интеграла
+    def check_empty_borders(self): #функция проверки на пустоту строк границ интеграла
         c_A = self.bord_a.toPlainText()
         c_B = self.bord_b.toPlainText()
 
@@ -153,10 +153,28 @@ class Ui_MainWindow(object):
         else:
             return True
 
-    def error_borders(self): #функция вывода ошибки пустых строк границ интеграла
+    def error_empty_borders(self): #функция вывода ошибки пустых строк границ интеграла
         error_bord = QMessageBox()
         error_bord.setWindowTitle("Ошибка")
         error_bord.setText("Не указаны границы интеграла!")
+        error_bord.setIcon(QMessageBox.Warning)
+        error_bord.setStandardButtons(QMessageBox.Close)
+        error_bord.exec_()
+        return 0
+
+    def check_digital_borders(self):
+        c_A = self.bord_a.toPlainText()
+        c_B = self.bord_b.toPlainText()
+
+        if (not c_A.isdigit() or not c_B.isdigit()):
+            return False
+        else:
+            return True
+
+    def error_digital_borders(self):
+        error_bord = QMessageBox()
+        error_bord.setWindowTitle("Ошибка")
+        error_bord.setText("Неверно указаны границы интеграла!")
         error_bord.setIcon(QMessageBox.Warning)
         error_bord.setStandardButtons(QMessageBox.Close)
         error_bord.exec_()
@@ -222,47 +240,55 @@ class Ui_MainWindow(object):
         return sum
 
     def Integral(self): #функция расчёта интеграла
-        check_r = self.check_equation()
-        check_b = self.check_borders()
-        if check_r == False:
-            self.error_equation()
+        check_e_r = self.check_empty_equation()
+        check_e_b = self.check_empty_borders()
+        check_d_b = self.check_digital_borders()
+        if check_e_r == False:
+            self.error_empty_equation()
         else:
-            if check_b == False:
-                self.error_borders()
+            if check_e_b == False:
+                self.error_empty_borders()
             else:
-                r_res = self.rectangle()
-                t_res = self.trapezium()
-                s_res = self.Simpson()
+                if check_d_b == False:
+                    self.error_digital_borders()
+                else:
+                    r_res = self.rectangle()
+                    t_res = self.trapezium()
+                    s_res = self.Simpson()
 
-                self.result_rect.setText(str(r_res))
-                self.result_trap.setText(str(t_res))
-                self.result_Simp.setText(str(s_res))
+                    self.result_rect.setText(str(r_res))
+                    self.result_trap.setText(str(t_res))
+                    self.result_Simp.setText(str(s_res))
         return 0
 
     def draw_graph(self): #функция построения графика функции
-        check_r = self.check_equation()
-        check_b = self.check_borders()
-        if check_r == False:
-            self.error_equation()
+        check_e_r = self.check_empty_equation()
+        check_e_b = self.check_empty_borders()
+        check_d_b = self.check_digital_borders()
+        if check_e_r == False:
+            self.error_empty_equation()
         else:
-            if check_b == False:
-                self.error_borders()
+            if check_e_b == False:
+                self.error_empty_borders()
             else:
-                xa, xb = self.int_borders()
+                if check_d_b == False:
+                    self.error_digital_borders()
+                else:
+                    xa, xb = self.int_borders()
 
-                fig = plt.figure()
-                fig.patch.set_facecolor('#4a5b67')
-                fig.patch.set_alpha(1)
+                    fig = plt.figure()
+                    fig.patch.set_facecolor('#4a5b67')
+                    fig.patch.set_alpha(1)
 
-                ax = fig.add_subplot(111)
-                ax.patch.set_alpha(0.0)
+                    ax = fig.add_subplot(111)
+                    ax.patch.set_alpha(0.0)
 
-                t=np.linspace(xa, xb)
-                y=self.func(t)
-                plt.plot(t, y, color='#ffa1c0')
-                plt.fill_between(t, y, np.zeros_like(y), color='#bd305b')
-                plt.grid()
-                plt.show()
+                    t=np.linspace(xa, xb)
+                    y=self.func(t)
+                    plt.plot(t, y, color='#ffa1c0')
+                    plt.fill_between(t, y, np.zeros_like(y), color='#bd305b')
+                    plt.grid()
+                    plt.show()
         return 0
 
 
