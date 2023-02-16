@@ -128,14 +128,14 @@ class Ui_MainWindow(object):
         self.btn_integral.clicked.connect(lambda: self.Integral())
         self.num_seg.valueChanged.connect(self.update_NumSeg)
 
-    def check_equation(self):
+    def check_equation(self): #функция проверки на пустоту строки уравнения
         c_equa = self.equation.toPlainText()
         if not c_equa or c_equa.isspace():
             return False
         else:
             return True
 
-    def error_equation(self):
+    def error_equation(self): #функция вывода ошибки пустой строки уравнения
         error_equa = QMessageBox()
         error_equa.setWindowTitle("Ошибка")
         error_equa.setText("Не указано уравнение функции!")
@@ -144,7 +144,7 @@ class Ui_MainWindow(object):
         error_equa.exec_()
         return 0
 
-    def check_borders(self):
+    def check_borders(self): #функция проверки на пустоту строк границ интеграла
         c_A = self.bord_a.toPlainText()
         c_B = self.bord_b.toPlainText()
 
@@ -153,7 +153,7 @@ class Ui_MainWindow(object):
         else:
             return True
 
-    def error_borders(self):
+    def error_borders(self): #функция вывода ошибки пустых строк границ интеграла
         error_bord = QMessageBox()
         error_bord.setWindowTitle("Ошибка")
         error_bord.setText("Не указаны границы интеграла!")
@@ -162,12 +162,12 @@ class Ui_MainWindow(object):
         error_bord.exec_()
         return 0
 
-    def func(self, x):
+    def func(self, x): #функция функции уравнения
         equa = self.equation.toPlainText()
         ev=eval(equa)
         return ev
 
-    def int_borders(self):
+    def int_borders(self): #функция границ интеграла
         xa = float(self.bord_a.toPlainText())
         xb = float(self.bord_b.toPlainText())
 
@@ -177,12 +177,12 @@ class Ui_MainWindow(object):
             xa=xbn
         return xa, xb
 
-    def update_NumSeg(self):
+    def update_NumSeg(self): #функция вывода числа разбиений интеграла
         self.text_seg.setText(str(self.num_seg.value()))
         val = self.num_seg.value()
         return val
 
-    def rectangle(self):
+    def rectangle(self): #функция метода прямоугольников
         xa, xb = self.int_borders()
         n = self.update_NumSeg()
         sum = 0
@@ -193,7 +193,7 @@ class Ui_MainWindow(object):
             btx += h
         return sum * h
 
-    def trapezium(self):
+    def trapezium(self): #функция метода трапеций
         xa, xb = self.int_borders()
         n = self.update_NumSeg()
         sum = 0
@@ -205,7 +205,7 @@ class Ui_MainWindow(object):
             btx += h
         return sum * h
 
-    def Simpson(self):
+    def Simpson(self): #функция метода Симпсона
         xa, xb = self.int_borders()
         n = self.update_NumSeg()
         sum=0
@@ -221,7 +221,7 @@ class Ui_MainWindow(object):
         sum = (h / 3) * (sum + 4 * sum1 + 2 * sum2)
         return sum
 
-    def Integral(self):
+    def Integral(self): #функция расчёта интеграла
         check_r = self.check_equation()
         check_b = self.check_borders()
         if check_r == False:
@@ -239,7 +239,7 @@ class Ui_MainWindow(object):
                 self.result_Simp.setText(str(s_res))
         return 0
 
-    def draw_graph(self):
+    def draw_graph(self): #функция построения графика функции
         check_r = self.check_equation()
         check_b = self.check_borders()
         if check_r == False:
