@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QMessageBox, QLabel, QWidget
 import numpy as np
 import matplotlib.pyplot as plt
 import math
@@ -7,24 +7,28 @@ import math
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
 
+        window_title = "Интеграл v. 0.5.1"
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1200, 600)
+        MainWindow.setFixedSize(1200, 600)
         MainWindow.setStyleSheet("")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        MainWindow.setWindowTitle(window_title)
 
         self.equation = QtWidgets.QTextEdit(self.centralwidget)
         self.equation.setGeometry(QtCore.QRect(770, 10, 150, 30))
         self.equation.setObjectName("equation")
-        #self.equation.setWordWrapMode(QtGui.QTextOption.NoWrap)
+        self.equation.setWordWrapMode(QtGui.QTextOption.NoWrap)
 
         self.bord_a = QtWidgets.QTextEdit(self.centralwidget)
         self.bord_a.setGeometry(QtCore.QRect(770, 50, 150, 30))
         self.bord_a.setObjectName("bord_a")
+        self.bord_a.setWordWrapMode(QtGui.QTextOption.NoWrap)
 
         self.bord_b = QtWidgets.QTextEdit(self.centralwidget)
         self.bord_b.setGeometry(QtCore.QRect(770, 90, 150, 30))
         self.bord_b.setObjectName("bord_b")
+        self.bord_b.setWordWrapMode(QtGui.QTextOption.NoWrap)
 
         self.num_seg = QtWidgets.QSlider(self.centralwidget)
 
@@ -166,10 +170,12 @@ class Ui_MainWindow(object):
         c_A = self.bord_a.toPlainText()
         c_B = self.bord_b.toPlainText()
 
-        if (not c_A.isdigit() or not c_B.isdigit()):
-            return False
-        else:
+        try:
+            float (c_A)
+            float (c_B)
             return True
+        except ValueError:
+            return False
 
     def error_digital_borders(self):
         error_bord = QMessageBox()
