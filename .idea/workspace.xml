@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fa93ee4d-70e8-446b-a679-00f5353b5532" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Integral.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Integral.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/integral 1.0.py" beforeDir="false" afterPath="$PROJECT_DIR$/integral 1.0.py" afterDir="false" />
     </list>
@@ -111,8 +109,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.integral 1.0" />
-        <item itemvalue="Python.test_widget" />
         <item itemvalue="Python.integral 0.5.2" />
+        <item itemvalue="Python.test_widget" />
       </list>
     </recent_temporary>
   </component>
