@@ -8,7 +8,7 @@ from matplotlib.figure import Figure # Фигура для черчения
 
 # Импортирование необходимых виджетов
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QMessageBox, QLabel, QSlider, QWidget, QApplication, QPushButton, QMainWindow, QHBoxLayout, QVBoxLayout, QTextEdit
+from PyQt5.QtWidgets import QMessageBox, QLabel, QSlider, QWidget, QApplication, QPushButton, QMainWindow, QHBoxLayout, QVBoxLayout, QTextEdit, QGroupBox
 from PyQt5.QtCore import QRect, Qt
 from PyQt5.QtGui import QTextOption
 
@@ -26,12 +26,18 @@ class PlotWidget(QWidget):
         self.mainLayout.addWidget(self.canvas)
         self.mainLayout.addWidget(self.navToolbar)
 
+    def Integral(self):
+        print("Hello, World!")
+
+    def Graph(self):
+        print("Hellow, Human!")
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
 
         self.initUi()
-        #self.connectUi()
+        self.connectUi()
 
     def initUi(self):
         self.centralWidget = QWidget(self)
@@ -59,7 +65,10 @@ class MainWindow(QMainWindow):
         self.plotWidget = PlotWidget()
 
         self.btn_graph = QPushButton('Построить график')
+        self.btn_graph.setFixedWidth(150)
+
         self.btn_integral = QPushButton('Вычислить')
+        self.btn_integral.setFixedWidth(150)
 
         self.equation = QTextEdit(self)
         self.equation.setFixedSize(150, 24)
@@ -78,7 +87,16 @@ class MainWindow(QMainWindow):
         self.tit_Xb = QLabel('Правая граница')
 
         self.num_seg = QSlider()
+        min_seg = 2
+        max_seg = 100
         self.num_seg.setOrientation(Qt.Horizontal)
+        self.num_seg.setFixedWidth(150)
+        self.num_seg.setRange(min_seg, max_seg)
+        self.num_seg.setObjectName("num_seg")
+        self.num_seg.setTickInterval(10)
+        self.num_seg.setSingleStep(5)
+        self.num_seg.setTickPosition(QtWidgets.QSlider.TicksBelow)
+        self.num_seg.setValue(min_seg)
 
         self.tit_num_seg = QLabel('Число разбиений')
         self.text_num_seg = QLabel('1')
@@ -97,6 +115,7 @@ class MainWindow(QMainWindow):
         self.res_Simp.setFixedSize(150, 24)
 
         self.tit_res_Simp = QLabel('Метод Симпсона')
+
 
         #self.btn_graph.setStyleSheet('font-size: 12pt; font-weight: 530;')
         #self.btn_integral.setStyleSheet('font-size: 12pt; font-weight: 530;')
@@ -155,6 +174,11 @@ class MainWindow(QMainWindow):
         self.H1.addLayout(self.V1)
 
         self.setCentralWidget(self.centralWidget)
+
+    def connectUi(self):
+        self.btn_integral.clicked.connect(self.plotWidget.Integral)
+        self.btn_graph.clicked.connect(self.plotWidget.Graph)
+        return 0
 
 app = QApplication([])
 p = MainWindow()
