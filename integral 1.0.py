@@ -12,7 +12,54 @@ from PyQt5.QtWidgets import QMessageBox, QLabel, QSlider, QWidget, QApplication,
 from PyQt5.QtCore import QRect, Qt
 from PyQt5.QtGui import QTextOption
 
-class PlotWidget(QWidget):
+
+class Methods():
+    def __init__(self, parent=None):
+        super(Methods, self).__init__()
+    def hi(self):
+        print("HI!")
+
+    """def rectangle(self): #функция метода прямоугольников
+        xa, xb = self.int_borders()
+        n = self.update_NumSeg()
+        sum = 0
+        h = (xb - xa) / n
+        btx = xa + h/2
+        while(btx < xb):
+            sum += self.func(btx)
+            btx += h
+        return sum * h
+
+    def trapezium(self): #функция метода трапеций
+        xa, xb = self.int_borders()
+        n = self.update_NumSeg()
+        sum = 0
+        h = (xb - xa) / n
+        btx = xa+h
+        sum = (self.func(xa)+self.func(xb))/2
+        for i in range (1, n):
+            sum += self.func(btx)
+            btx += h
+        return sum * h
+
+    def Simpson(self): #функция метода Симпсона
+        xa, xb = self.int_borders()
+        n = self.update_NumSeg()
+        sum=0
+        btx = xa
+        h = (xb - xa) / n
+        sum = self.func(xa)+self.func(xb)
+        sum1 = 0
+        sum2 = 0
+        for i in range (1, n, 2):
+            sum1 += self.func(btx + i * h)
+        for i in range (2, n, 2):
+            sum2 += self.func(btx + i * h)
+        sum = (h / 3) * (sum + 4 * sum1 + 2 * sum2)
+        return sum"""
+
+
+class PlotWidget(QWidget, Methods):
     def __init__(self, parent=None):
         super(PlotWidget, self).__init__(parent) # Инициализируем экземпляр
         self.initUi() # Строит интерфейс
@@ -27,10 +74,14 @@ class PlotWidget(QWidget):
         self.mainLayout.addWidget(self.navToolbar)
 
     def Integral(self):
-        print("Hello, World!")
+        hihi = self.hi()
+        """r_res = self.rectangle()
+        t_res = self.trapezium()
+        s_res = self.Simpson()
+        print("Hello, World!")"""
 
     def Graph(self):
-        print("Hellow, Human!")
+        print("Hello, Human!")
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -38,13 +89,10 @@ class MainWindow(QMainWindow):
 
         self.initUi()
         self.connectUi()
+        self.update_NumSeg()
 
     def initUi(self):
         self.centralWidget = QWidget(self)
-
-        #self.l = QVBoxLayout(self.centralWidget)
-        #self.bl = QHBoxLayout(self.centralWidget)
-
         self.H1 = QHBoxLayout(self.centralWidget)
         self.H2 = QHBoxLayout(self.centralWidget)
         self.H3 = QHBoxLayout(self.centralWidget)
@@ -78,17 +126,15 @@ class MainWindow(QMainWindow):
 
         self.Xa = QTextEdit()
         self.Xa.setFixedSize(150, 24)
-
         self.tit_Xa = QLabel('Левая граница')
 
         self.Xb = QTextEdit()
         self.Xb.setFixedSize(150, 24)
-
         self.tit_Xb = QLabel('Правая граница')
 
-        self.num_seg = QSlider()
         min_seg = 2
         max_seg = 100
+        self.num_seg = QSlider()
         self.num_seg.setOrientation(Qt.Horizontal)
         self.num_seg.setFixedWidth(150)
         self.num_seg.setRange(min_seg, max_seg)
@@ -97,23 +143,19 @@ class MainWindow(QMainWindow):
         self.num_seg.setSingleStep(5)
         self.num_seg.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.num_seg.setValue(min_seg)
-
         self.tit_num_seg = QLabel('Число разбиений')
         self.text_num_seg = QLabel('1')
 
         self.res_rect = QTextEdit()
         self.res_rect.setFixedSize(150, 24)
-
         self.tit_res_rect = QLabel('Метод прямоугольников')
 
         self.res_trap = QTextEdit()
         self.res_trap.setFixedSize(150, 24)
-
         self.tit_res_trap = QLabel('Метод трапеций')
 
         self.res_Simp = QTextEdit()
         self.res_Simp.setFixedSize(150, 24)
-
         self.tit_res_Simp = QLabel('Метод Симпсона')
 
 
@@ -175,10 +217,15 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.centralWidget)
 
+    def update_NumSeg(self): #функция вывода числа разбиений интеграла
+        self.text_num_seg.setText(str(self.num_seg.value()))
+        val = self.num_seg.value()
+        return val
+
     def connectUi(self):
         self.btn_integral.clicked.connect(self.plotWidget.Integral)
         self.btn_graph.clicked.connect(self.plotWidget.Graph)
-        return 0
+        self.num_seg.valueChanged.connect(self.update_NumSeg)
 
 app = QApplication([])
 p = MainWindow()
