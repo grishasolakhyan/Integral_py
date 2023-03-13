@@ -1,12 +1,12 @@
 import sys
-import random # Для рандомного выбора функций
-import numpy as np # Для вычислений
+import random
+import numpy as np
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas # Область для черчения
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar # Панель управления
 from matplotlib.figure import Figure # Фигура для черчения
 
-# Импортирование необходимых виджетов
+# Импортирование виджетов
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox, QLabel, QSlider, QWidget, QApplication, QPushButton, QMainWindow, QHBoxLayout, QVBoxLayout, QTextEdit, QGroupBox
 from PyQt5.QtCore import QRect, Qt
@@ -18,8 +18,8 @@ class Methods():
         super(Methods, self).__init__()
     def hi(self):
         print("HI!")
-
-    """def rectangle(self): #функция метода прямоугольников
+    '''
+    def rectangle(self): #функция метода прямоугольников
         xa, xb = self.int_borders()
         n = self.update_NumSeg()
         sum = 0
@@ -56,13 +56,14 @@ class Methods():
         for i in range (2, n, 2):
             sum2 += self.func(btx + i * h)
         sum = (h / 3) * (sum + 4 * sum1 + 2 * sum2)
-        return sum"""
+        return sum
+    '''
 
 
 class PlotWidget(QWidget, Methods):
     def __init__(self, parent=None):
-        super(PlotWidget, self).__init__(parent) # Инициализируем экземпляр
-        self.initUi() # Строит интерфейс
+        super(PlotWidget, self).__init__(parent) # Инициализирование экземпляр
+        self.initUi() # Формирование интерфейса
 
     def initUi(self):
         self.mainLayout = QVBoxLayout(self)
@@ -75,10 +76,12 @@ class PlotWidget(QWidget, Methods):
 
     def Integral(self):
         hihi = self.hi()
-        """r_res = self.rectangle()
+        '''
+        r_res = self.rectangle()
         t_res = self.trapezium()
         s_res = self.Simpson()
-        print("Hello, World!")"""
+        print("Hello, World!")
+        '''
 
     def Graph(self):
         print("Hello, Human!")
@@ -158,15 +161,8 @@ class MainWindow(QMainWindow):
         self.res_Simp.setFixedSize(150, 24)
         self.tit_res_Simp = QLabel('Метод Симпсона')
 
-
         #self.btn_graph.setStyleSheet('font-size: 12pt; font-weight: 530;')
         #self.btn_integral.setStyleSheet('font-size: 12pt; font-weight: 530;')
-
-        #self.bl.addWidget(self.buildButton)
-        #self.bl.addWidget(self.calculateButton)
-
-        #self.l.addLayout(self.bl)
-        #self.l.addWidget(self.plotWidget)
 
         self.H6.addWidget(self.res_rect)
         self.H6.addWidget(self.tit_res_rect)
@@ -217,7 +213,7 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.centralWidget)
 
-    def update_NumSeg(self): #функция вывода числа разбиений интеграла
+    def update_NumSeg(self):
         self.text_num_seg.setText(str(self.num_seg.value()))
         val = self.num_seg.value()
         return val
