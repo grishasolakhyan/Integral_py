@@ -163,7 +163,20 @@ class Integral_Methods():
         self.xa = float(self.xa.toPlainText())
         self.xb = float(self.xb.toPlainText())
 
-        print(self.xa, " ", self.xb)
+        if self.xa>self.xb:
+            xbn=self.xb
+            self.xb=self.xa
+            self.xa=xbn
+
+        print(self.xa, ' ',self.xb, sep='')
+        return self.xa, self.xb
+
+    def func(self, x):
+        x = 10
+        self.equa = self.mainwindow.equation.toPlainText()
+        self.ev_res = eval(self.equa)
+        print(self.ev_res)
+        return 0
 
     def Integral(self):
         print("Hello, World!")
