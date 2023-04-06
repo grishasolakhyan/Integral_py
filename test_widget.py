@@ -48,23 +48,16 @@ class PlotWidget(QWidget):
     def plot(self):
 
         function_index = random.randint(1, 4)
-
         function = PlotWidget.functions[function_index]
-
         x = np.linspace(-10, 10, 2000)
-
         y = function(x)
-
         self.figure.clear()
         ax = self.figure.add_subplot(111)
         ax.set_facecolor('#DCDCDC')
-
         ax.axhline(y = 0, xmin = -10.25, xmax = 10.25, color = '#000000')
         ax.axvline(x = 0, ymin = -2, ymax = 2, color = '#000000')
-
         ax.set_ylim([-2, 2])
         ax.set_xlim([-10.25, 10.25])
-
         if function == np.sin or function == np.cos:
             ax.axhline(y = 1, xmin = -10.25, xmax = 10.25, color='b', linestyle='--')
             ax.axhline(y = -1, xmin = -10.25, xmax = 10.25, color='b', linestyle='--')

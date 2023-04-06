@@ -23,8 +23,8 @@ class MainWindow(QMainWindow):
 
     def initUi(self):
         self.centralWidget = QWidget(self)
-        self.plotWidget = PlotWidget()
         self.integral_methods = Integral_Methods(self)
+        self.plotWidget = PlotWidget(self.integral_methods)
 
         self.H1 = QHBoxLayout(self.centralWidget)
         self.H2 = QHBoxLayout(self.centralWidget)
@@ -129,6 +129,7 @@ class MainWindow(QMainWindow):
 
         self.V5.addLayout(self.H5)
         self.V5.addWidget(self.tit_num_seg)
+        self.V5.setAlignment(Qt.AlignTop)
 
         self.V2.addLayout(self.V4)
         self.V2.addLayout(self.V5)
@@ -147,16 +148,17 @@ class MainWindow(QMainWindow):
         return val
 
     def connectUi(self):
-        self.btn_integral.clicked.connect(self.integral_methods.int_borders)
-        self.btn_graph.clicked.connect(self.plotWidget.Graph)
+        self.btn_integral.clicked.connect(self.integral_methods.Integral)
+        self.btn_graph.clicked.connect(self.plotWidget.plot)
         self.num_seg.valueChanged.connect(self.update_NumSeg)
+
 
 class Integral_Methods():
     def __init__(self, MainWindow, parent=None):
-        super(Integral_Methods, self).__init__()
+        #super(Integral_Methods, self).__init__()
         self.mainwindow = MainWindow
 
-    def int_borders(self): #функция границ интеграла
+    def borders(self): #функция границ интеграла
         self.xa = self.mainwindow.Xa
         self.xb = self.mainwindow.Xb
 
@@ -168,23 +170,141 @@ class Integral_Methods():
             self.xb=self.xa
             self.xa=xbn
 
-        print(self.xa, ' ',self.xb, sep='')
         return self.xa, self.xb
 
     def func(self, x):
-        x = 10
         self.equa = self.mainwindow.equation.toPlainText()
         self.ev_res = eval(self.equa)
-        print(self.ev_res)
+        return self.ev_res
+
+    def rectangle(self):
+        xa, xb = self.borders()
+        n = self.mainwindow.update_NumSeg()
+        sum = 0
+        h = (xb - xa) / n
+        btx = xa + h/2
+        while (btx < xb):
+            sum += self.func(btx)
+            btx += h
+
+        return sum * h
+
+    def trapezium(self):
+        xa, xb = self.borders()
+        n = self.mainwindow.update_NumSeg()
+        sum = 0
+        h = (xb - xa) / n
+        btx = xa + h
+        sum = (self.func(xa) + self.func(xb)) / 2
+        for i in range(1, n):
+            sum += self.func(btx)
+            btx += h
+
+        return sum * h
+
+    def Simpson(self):
+        xa, xb = self.borders()
+        n = self.mainwindow.update_NumSeg()
+        sum = 0
+        btx = xa
+        h = (xb - xa) / n
+        sum = self.func(xa) + self.func(xb)
+        sum1 = 0
+        sum2 = 0
+        for i in range(1, n, 2):
+            sum1 += self.func(btx + i * h)
+        for i in range(2, n, 2):
+            sum2 += self.func(btx + i * h)
+        sum = (h / 3) * (sum + 4 * sum1 + 2 * sum2)
+
+        return sum
+
+    def check_empty_equation(self):
+        self.c_equa = self.mainwindow.equation.toPlainText()
+        if not self.c_equa or self.c_equa.isspace():
+            return False
+        else:
+            return True
+
+    def error_empty_equation(self): #функция вывода ошибки пустой строки уравнения
+        error_equa = QMessageBox()
+        error_equa.setWindowTitle("Ошибка")
+        error_equa.setText("Не указано уравнение функции!")
+        error_equa.setIcon(QMessageBox.Warning)
+        error_equa.setStandardButtons(QMessageBox.Close)
+        error_equa.exec_()
+        return 0
+
+    def check_empty_borders(self):
+        c_A = self.mainwindow.Xa.toPlainText()
+        c_B = self.mainwindow.Xb.toPlainText()
+
+        if (not c_A or not c_B or c_A.isspace() or c_B.isspace()):
+            return False
+        else:
+            return True
+
+    def error_empty_borders(self): #функция вывода ошибки пустых строк границ интеграла
+        error_bord = QMessageBox()
+        error_bord.setWindowTitle("Ошибка")
+        error_bord.setText("Не указаны границы интеграла!")
+        error_bord.setIcon(QMessageBox.Warning)
+        error_bord.setStandardButtons(QMessageBox.Close)
+        error_bord.exec_()
+        return 0
+
+    def check_digital_borders(self):
+        c_A = self.mainwindow.Xa.toPlainText()
+        c_B = self.mainwindow.Xb.toPlainText()
+
+        try:
+            float(c_A)
+            float(c_B)
+            return True
+        except ValueError:
+            return False
+
+    def error_digital_borders(self):
+        error_bord = QMessageBox()
+        error_bord.setWindowTitle("Ошибка")
+        error_bord.setText("Неверно указаны границы интеграла!")
+        error_bord.setIcon(QMessageBox.Warning)
+        error_bord.setStandardButtons(QMessageBox.Close)
+        error_bord.exec_()
         return 0
 
     def Integral(self):
-        print("Hello, World!")
+        check_e_r = self.check_empty_equation()
+        check_e_b = self.check_empty_borders()
+        check_d_b = self.check_digital_borders()
+
+        self.res_rect = self.mainwindow.res_rect
+        self.res_trap = self.mainwindow.res_trap
+        self.res_Simp = self.mainwindow.res_Simp
+
+        if check_e_r == False:
+            self.error_empty_equation()
+        else:
+            if check_e_b == False:
+                self.error_empty_borders()
+            else:
+                if check_d_b == False:
+                    self.error_digital_borders()
+                else:
+                    r_res = self.rectangle()
+                    t_res = self.trapezium()
+                    s_res = self.Simpson()
+
+                    self.res_rect.setText(str(r_res))
+                    self.res_trap.setText(str(t_res))
+                    self.res_Simp.setText(str(s_res))
+        return 0
 
 class PlotWidget(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, Integral_Methods, parent=None):
         super(PlotWidget, self).__init__(parent) # Инициализирование экземпляр
         self.initUi() # Формирование интерфейса
+        self.integral_methods = Integral_Methods
 
     def initUi(self):
         self.mainLayout = QVBoxLayout(self)
@@ -195,8 +315,19 @@ class PlotWidget(QWidget):
         self.mainLayout.addWidget(self.canvas)
         self.mainLayout.addWidget(self.navToolbar)
 
-    def Graph(self):
-        print("Hello, Human!")
+    def plot(self):
+        xa, xb = self.integral_methods.borders()
+
+        x = np.linspace(xa, xb, 100)
+        y = self.integral_methods.func(x)
+
+        self.figure.clear()
+        ax = self.figure.add_subplot(111)
+        ax.set_facecolor('#4a5b67')
+        ax.grid()
+        ax.plot(x, y, linestyle = '-', color='#ffa1c0')
+        ax.fill_between(x, y, np.zeros_like(y), color='#bd305b')
+        self.canvas.draw()
 
 app = QApplication([])
 p = MainWindow()
