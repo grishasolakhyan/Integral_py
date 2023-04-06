@@ -6,12 +6,13 @@ from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas # Область для черчения
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar # Панель управления
 from matplotlib.figure import Figure # Фигура для черчения
+from matplotlib.font_manager import FontProperties
 
 # Импортирование виджетов
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox, QLabel, QSlider, QWidget, QApplication, QPushButton, QMainWindow, QHBoxLayout, QVBoxLayout, QTextEdit, QGroupBox
 from PyQt5.QtCore import QRect, Qt
-from PyQt5.QtGui import QTextOption
+from PyQt5.QtGui import QTextOption, QFont
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -88,9 +89,6 @@ class MainWindow(QMainWindow):
         self.res_Simp = QTextEdit()
         self.res_Simp.setFixedSize(150, 24)
         self.tit_res_Simp = QLabel('Метод Симпсона')
-
-        #self.btn_graph.setStyleSheet('font-size: 12pt; font-weight: 530;')
-        #self.btn_integral.setStyleSheet('font-size: 12pt; font-weight: 530;')
 
         self.H6.addWidget(self.res_rect)
         self.H6.addWidget(self.tit_res_rect)
@@ -316,17 +314,27 @@ class PlotWidget(QWidget):
         self.mainLayout.addWidget(self.navToolbar)
 
     def plot(self):
+        font = FontProperties()
+        font.set_family('serif')
+        font.set_name('Arial')
+        font.set_size('large')
+
         xa, xb = self.integral_methods.borders()
 
         x = np.linspace(xa, xb, 100)
         y = self.integral_methods.func(x)
 
         self.figure.clear()
+
         ax = self.figure.add_subplot(111)
         ax.set_facecolor('#4a5b67')
         ax.grid()
-        ax.plot(x, y, linestyle = '-', color='#ffa1c0')
+        ax.plot(x, y, linestyle = '-', color='#ffa1c0', label='f(x)')
+        ax.legend(loc='upper right')
+        ax.set_xlabel('X', fontproperties=font)
+        ax.set_ylabel('Y', fontproperties=font)
         ax.fill_between(x, y, np.zeros_like(y), color='#bd305b')
+
         self.canvas.draw()
 
 app = QApplication([])
