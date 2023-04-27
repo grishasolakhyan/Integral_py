@@ -1,6 +1,7 @@
 import sys
 import random
 import numpy as np
+import re
 
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas # Область для черчения
@@ -11,7 +12,7 @@ from matplotlib.font_manager import FontProperties
 # Импортирование виджетов
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox, QLabel, QSlider, QWidget, QApplication, QPushButton, QMainWindow, QHBoxLayout, QVBoxLayout, QTextEdit, QGroupBox
-from PyQt5.QtCore import QRect, Qt
+from PyQt5.QtCore import QRect, Qt, QRegExp
 from PyQt5.QtGui import QTextOption, QFont
 
 class MainWindow(QMainWindow):
@@ -233,6 +234,26 @@ class Integral_Methods():
         error_equa.exec_()
         return 0
 
+    def check_x_equation(self):
+        x_equa = self.mainwindow.equation.toPlainText()
+        print(x_equa)
+        reg = "^[x0-9.,:;!_*-+()/#¤%&]+$"
+        pattern = re.compile(reg)
+        print(pattern.search(x_equa) is not None)
+        if pattern.search(x_equa) is not None:
+            return True
+        else:
+            return False
+
+    def error_x_equation(self): #функция вывода ошибки пустой строки уравнения
+        error_equa = QMessageBox()
+        error_equa.setWindowTitle("Ошибка")
+        error_equa.setText("Неверный формат уравнения!")
+        error_equa.setIcon(QMessageBox.Warning)
+        error_equa.setStandardButtons(QMessageBox.Close)
+        error_equa.exec_()
+        return 0
+
     def check_empty_borders(self):
         c_A = self.mainwindow.Xa.toPlainText()
         c_B = self.mainwindow.Xb.toPlainText()
@@ -272,7 +293,8 @@ class Integral_Methods():
         return 0
 
     def Integral(self):
-        check_e_r = self.check_empty_equation()
+        check_e_e = self.check_empty_equation()
+        check_x_e = self.check_x_equation()
         check_e_b = self.check_empty_borders()
         check_d_b = self.check_digital_borders()
 
@@ -280,22 +302,25 @@ class Integral_Methods():
         self.res_trap = self.mainwindow.res_trap
         self.res_Simp = self.mainwindow.res_Simp
 
-        if check_e_r == False:
+        if check_e_e == False:
             self.error_empty_equation()
         else:
-            if check_e_b == False:
-                self.error_empty_borders()
+            if check_x_e == False:
+                self.error_x_equation()
             else:
-                if check_d_b == False:
-                    self.error_digital_borders()
+                if check_e_b == False:
+                    self.error_empty_borders()
                 else:
-                    r_res = self.rectangle()
-                    t_res = self.trapezium()
-                    s_res = self.Simpson()
+                    if check_d_b == False:
+                        self.error_digital_borders()
+                    else:
+                        r_res = self.rectangle()
+                        t_res = self.trapezium()
+                        s_res = self.Simpson()
 
-                    self.res_rect.setText(str(r_res))
-                    self.res_trap.setText(str(t_res))
-                    self.res_Simp.setText(str(s_res))
+                        self.res_rect.setText(str(r_res))
+                        self.res_trap.setText(str(t_res))
+                        self.res_Simp.setText(str(s_res))
         return 0
 
 class PlotWidget(QWidget):
@@ -314,28 +339,45 @@ class PlotWidget(QWidget):
         self.mainLayout.addWidget(self.navToolbar)
 
     def plot(self):
-        font = FontProperties()
-        font.set_family('serif')
-        font.set_name('Arial')
-        font.set_size('large')
+        check_e_e = self.integral_methods.check_empty_equation()
+        check_x_e = self.integral_methods.check_x_equation()
+        check_e_b = self.integral_methods.check_empty_borders()
+        check_d_b = self.integral_methods.check_digital_borders()
 
-        xa, xb = self.integral_methods.borders()
+        if check_e_e == False:
+            self.integral_methods.error_empty_equation()
+        else:
+            if check_x_e == False:
+                self.integral_methods.error_x_equation()
+            else:
+                if check_e_b == False:
+                    self.integral_methods.error_empty_borders()
+                else:
+                    if check_d_b == False:
+                        self.integral_methods.error_digital_borders()
+                    else:
+                        font = FontProperties()
+                        font.set_family('serif')
+                        font.set_name('Arial')
+                        font.set_size('large')
 
-        x = np.linspace(xa, xb, 100)
-        y = self.integral_methods.func(x)
+                        xa, xb = self.integral_methods.borders()
 
-        self.figure.clear()
+                        x = np.linspace(xa, xb, 100)
+                        y = self.integral_methods.func(x)
 
-        ax = self.figure.add_subplot(111)
-        ax.set_facecolor('#4a5b67')
-        ax.grid()
-        ax.plot(x, y, linestyle = '-', color='#ffa1c0', label='f(x)')
-        ax.legend(loc='upper right')
-        ax.set_xlabel('X', fontproperties=font)
-        ax.set_ylabel('Y', fontproperties=font)
-        ax.fill_between(x, y, np.zeros_like(y), color='#bd305b')
+                        self.figure.clear()
 
-        self.canvas.draw()
+                        ax = self.figure.add_subplot(111)
+                        ax.set_facecolor('#4a5b67')
+                        ax.grid()
+                        ax.plot(x, y, linestyle = '-', color='#ffa1c0', label='f(x)')
+                        ax.legend(loc='upper right')
+                        ax.set_xlabel('X', fontproperties=font)
+                        ax.set_ylabel('Y', fontproperties=font)
+                        ax.fill_between(x, y, np.zeros_like(y), color='#bd305b')
+
+                        self.canvas.draw()
 
 app = QApplication([])
 p = MainWindow()
