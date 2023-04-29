@@ -235,7 +235,7 @@ class Integral_Methods():
     def check_x_equation(self):
         x_equa = self.mainwindow.equation.toPlainText()
         print(x_equa)
-        reg = "^[0-9.x/+-]+$"
+        reg = "^[0-9.x*()/+-]+$"
         pattern = re.compile(reg)
         print(pattern.search(x_equa) is not None)
         if pattern.search(x_equa) is not None:
