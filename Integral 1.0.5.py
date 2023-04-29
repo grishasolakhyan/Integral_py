@@ -1,19 +1,16 @@
 import sys
-import random
 import numpy as np
 import re
 
-from matplotlib import pyplot as plt
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas # Область для черчения
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar # Панель управления
-from matplotlib.figure import Figure # Фигура для черчения
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.figure import Figure
 from matplotlib.font_manager import FontProperties
 
-# Импортирование виджетов
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QMessageBox, QLabel, QSlider, QWidget, QApplication, QPushButton, QMainWindow, QHBoxLayout, QVBoxLayout, QTextEdit, QGroupBox
-from PyQt5.QtCore import QRect, Qt, QRegExp
-from PyQt5.QtGui import QTextOption, QFont
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QMessageBox, QLabel, QSlider, QWidget, QApplication, QPushButton, QMainWindow, QHBoxLayout, QVBoxLayout, QTextEdit
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QTextOption
 
 class MainWindow(QMainWindow):
     def __init__(self):
