@@ -22,6 +22,7 @@ class MainWindow(QMainWindow):
         self.initUi()
         self.connectUi()
         self.update_NumSeg()
+        self.setFixedSize(1000, 700)
 
     def initUi(self):
         self.centralWidget = QWidget(self)

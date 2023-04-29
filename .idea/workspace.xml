@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fa93ee4d-70e8-446b-a679-00f5353b5532" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Integral.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Integral.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Integral 1.0.2.py" beforeDir="false" afterPath="$PROJECT_DIR$/Integral 1.0.3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Integral 1.0.3.py" beforeDir="false" afterPath="$PROJECT_DIR$/Integral 1.0.3.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +43,7 @@
       <recent name="D:\Code\Repos\Python\Integral" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Integral 1.0.3">
+  <component name="RunManager" selected="Python.Integral 1.0.4">
     <configuration name="Проверка наличия" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Integral" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -88,7 +86,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Integral 1.0.3" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Integral 1.0.4" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Integral" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -100,7 +98,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="E:\Code\Repos\Integral_py\Integral 1.0.3.py" />
+      <option name="SCRIPT_NAME" value="E:\Code\Repos\Integral_py\Integral 1.0.4.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -153,7 +151,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.Integral 1.0.3" />
+        <item itemvalue="Python.Integral 1.0.4" />
         <item itemvalue="Python.Проверка наличия" />
         <item itemvalue="Python.Integral 1.0.1" />
         <item itemvalue="Python.integral 1.0" />
