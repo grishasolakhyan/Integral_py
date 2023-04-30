@@ -171,7 +171,10 @@ class Integral_Methods():
 
     def func(self, x):
         self.equa = self.mainwindow.equation.toPlainText()
-        self.ev_res = eval(self.equa)
+        try:
+            self.ev_res = eval(self.equa)
+        except ZeroDivisionError:
+            self.ev_res = 0
         return self.ev_res
 
     def rectangle(self):
@@ -235,7 +238,7 @@ class Integral_Methods():
     def check_x_equation(self):
         x_equa = self.mainwindow.equation.toPlainText()
         print(x_equa)
-        reg = "^[0-9.x*()/+-]+$"
+        reg = "^[0-9^.x*()/+-]+$"
         pattern = re.compile(reg)
         print(pattern.search(x_equa) is not None)
         if pattern.search(x_equa) is not None:
