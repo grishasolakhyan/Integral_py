@@ -19,7 +19,7 @@ class MainWindow(QMainWindow):
         self.initUi()
         self.connectUi()
         self.update_NumSeg()
-        self.setFixedSize(1000, 700)
+        # self.setFixedSize(1000, 700)
 
     def initUi(self):
         self.centralWidget = QWidget(self)
@@ -149,7 +149,6 @@ class MainWindow(QMainWindow):
         self.btn_graph.clicked.connect(self.plotWidget.plot)
         self.num_seg.valueChanged.connect(self.update_NumSeg)
 
-
 class Integral_Methods():
     def __init__(self, MainWindow, parent=None):
         #super(Integral_Methods, self).__init__()
@@ -226,10 +225,10 @@ class Integral_Methods():
         else:
             return True
 
-    def error_empty_equation(self): #функция вывода ошибки пустой строки уравнения
+    def error_messageBox(self, error_description):
         error_equa = QMessageBox()
         error_equa.setWindowTitle("Ошибка")
-        error_equa.setText("Не указано уравнение функции!")
+        error_equa.setText(error_description)
         error_equa.setIcon(QMessageBox.Warning)
         error_equa.setStandardButtons(QMessageBox.Close)
         error_equa.exec_()
@@ -246,15 +245,6 @@ class Integral_Methods():
         else:
             return False
 
-    def error_x_equation(self): #функция вывода ошибки пустой строки уравнения
-        error_equa = QMessageBox()
-        error_equa.setWindowTitle("Ошибка")
-        error_equa.setText("Неверный формат уравнения!")
-        error_equa.setIcon(QMessageBox.Warning)
-        error_equa.setStandardButtons(QMessageBox.Close)
-        error_equa.exec_()
-        return 0
-
     def check_empty_borders(self):
         c_A = self.mainwindow.Xa.toPlainText()
         c_B = self.mainwindow.Xb.toPlainText()
@@ -263,15 +253,6 @@ class Integral_Methods():
             return False
         else:
             return True
-
-    def error_empty_borders(self): #функция вывода ошибки пустых строк границ интеграла
-        error_bord = QMessageBox()
-        error_bord.setWindowTitle("Ошибка")
-        error_bord.setText("Не указаны границы интеграла!")
-        error_bord.setIcon(QMessageBox.Warning)
-        error_bord.setStandardButtons(QMessageBox.Close)
-        error_bord.exec_()
-        return 0
 
     def check_digital_borders(self):
         c_A = self.mainwindow.Xa.toPlainText()
@@ -284,15 +265,6 @@ class Integral_Methods():
         except ValueError:
             return False
 
-    def error_digital_borders(self):
-        error_bord = QMessageBox()
-        error_bord.setWindowTitle("Ошибка")
-        error_bord.setText("Неверно указаны границы интеграла!")
-        error_bord.setIcon(QMessageBox.Warning)
-        error_bord.setStandardButtons(QMessageBox.Close)
-        error_bord.exec_()
-        return 0
-
     def Integral(self):
         check_e_e = self.check_empty_equation()
         check_x_e = self.check_x_equation()
@@ -304,16 +276,16 @@ class Integral_Methods():
         self.res_Simp = self.mainwindow.res_Simp
 
         if check_e_e == False:
-            self.error_empty_equation()
+            self.error_messageBox('Не указано уравнение функции!')
         else:
             if check_x_e == False:
-                self.error_x_equation()
+                self.error_messageBox('Неверный формат уравнения!')
             else:
                 if check_e_b == False:
-                    self.error_empty_borders()
+                    self.error_messageBox('Не указаны границы интеграла!')
                 else:
                     if check_d_b == False:
-                        self.error_digital_borders()
+                        self.error_messageBox('Неверно указаны границы интеграла!')
                     else:
                         r_res = self.rectangle()
                         t_res = self.trapezium()
