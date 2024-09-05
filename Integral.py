@@ -12,7 +12,8 @@ from PyQt5.QtWidgets import QMessageBox, QLabel, QSlider, QWidget, QApplication,
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QTextOption
 
-class MainError(Exception): pass
+class ParametersError(Exception): pass
+class EquationError(Exception): pass
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -220,43 +221,21 @@ class Integral_Methods():
 
         return sum
 
-    def check_empty_equation(self):
-        self.c_equa = self.mainwindow.equation.toPlainText()
-        if not self.c_equa or self.c_equa.isspace():
-            return False
-        else:
-            return True
-
-    def check_x_equation(self):
-        x_equa = self.mainwindow.equation.toPlainText()
-        print(x_equa)
+    def checking_parameters(self):
+        c_equa = self.mainwindow.equation.toPlainText()
         reg = "^[0-9^.x*()/+-]+$"
         pattern = re.compile(reg)
-        print(pattern.search(x_equa) is not None)
-        if pattern.search(x_equa) is not None:
-            return True
-        else:
-            return False
-
-    def check_empty_borders(self):
         c_A = self.mainwindow.Xa.toPlainText()
         c_B = self.mainwindow.Xb.toPlainText()
 
-        if (not c_A or not c_B or c_A.isspace() or c_B.isspace()):
-            return False
-        else:
-            return True
-
-    def check_digital_borders(self):
-        c_A = self.mainwindow.Xa.toPlainText()
-        c_B = self.mainwindow.Xb.toPlainText()
-
-        try:
-            float(c_A)
-            float(c_B)
-            return True
-        except ValueError:
-            return False
+        if not c_equa or c_equa.isspace(): # если не указано уравнение функции
+            raise EquationError()
+        elif pattern.search(c_equa) is None: # если неверно указано уравнение функции
+            raise EquationError()
+        elif not c_A or not c_B or c_A.isspace() or c_B.isspace(): # если не указаны границы интеграла
+            raise ParametersError()
+        elif c_A.isdigit() == False or c_B.isdigit() == False: # если неверно указаны границы интеграла
+            raise ParametersError()
 
     def error_messageBox(self, error_description):
         error_equa = QMessageBox()
@@ -268,34 +247,26 @@ class Integral_Methods():
         return 0
 
     def Integral(self):
-        check_e_e = self.check_empty_equation()
-        check_x_e = self.check_x_equation()
-        check_e_b = self.check_empty_borders()
-        check_d_b = self.check_digital_borders()
+        try:
+            self.checking_parameters()
 
-        self.res_rect = self.mainwindow.res_rect
-        self.res_trap = self.mainwindow.res_trap
-        self.res_Simp = self.mainwindow.res_Simp
+            self.res_rect = self.mainwindow.res_rect
+            self.res_trap = self.mainwindow.res_trap
+            self.res_Simp = self.mainwindow.res_Simp
 
-        if check_e_e == False:
-            self.error_messageBox('Не указано уравнение функции!')
-        else:
-            if check_x_e == False:
-                self.error_messageBox('Неверный формат уравнения!')
-            else:
-                if check_e_b == False:
-                    self.error_messageBox('Не указаны границы интеграла!')
-                else:
-                    if check_d_b == False:
-                        self.error_messageBox('Неверно указаны границы интеграла!')
-                    else:
-                        r_res = self.rectangle()
-                        t_res = self.trapezium()
-                        s_res = self.Simpson()
+            r_res = self.rectangle()
+            t_res = self.trapezium()
+            s_res = self.Simpson()
 
-                        self.res_rect.setText(str(r_res))
-                        self.res_trap.setText(str(t_res))
-                        self.res_Simp.setText(str(s_res))
+            self.res_rect.setText(str(r_res))
+            self.res_trap.setText(str(t_res))
+            self.res_Simp.setText(str(s_res))
+
+        except EquationError:
+            self.error_messageBox('Неверно указано уравнение функции!')
+        except ParametersError:
+            self.error_messageBox('Неверно указаны параметры интеграла!')
+
         return 0
 
 class PlotWidget(QWidget):
@@ -314,45 +285,36 @@ class PlotWidget(QWidget):
         self.mainLayout.addWidget(self.navToolbar)
 
     def plot(self):
-        check_e_e = self.integral_methods.check_empty_equation()
-        check_x_e = self.integral_methods.check_x_equation()
-        check_e_b = self.integral_methods.check_empty_borders()
-        check_d_b = self.integral_methods.check_digital_borders()
+        try:
+            self.integral_methods.checking_parameters()
 
-        if check_e_e == False:
-            self.integral_methods.error_messageBox('Не указано уравнение функции!')
-        else:
-            if check_x_e == False:
-                self.integral_methods.error_messageBox('Неверный формат уравнения!')
-            else:
-                if check_e_b == False:
-                    self.integral_methods_methods.error_messageBox('Не указаны границы интеграла!')
-                else:
-                    if check_d_b == False:
-                        self.integral_methods.error_messageBox('Неверно указаны границы интеграла!')
-                    else:
-                        font = FontProperties()
-                        font.set_family('serif')
-                        font.set_name('Arial')
-                        font.set_size('large')
+            font = FontProperties()
+            font.set_family('serif')
+            font.set_name('Arial')
+            font.set_size('large')
 
-                        xa, xb = self.integral_methods.borders()
+            xa, xb = self.integral_methods.borders()
 
-                        x = np.linspace(xa, xb, 100)
-                        y = self.integral_methods.func(x)
+            x = np.linspace(xa, xb, 100)
+            y = self.integral_methods.func(x)
 
-                        self.figure.clear()
+            self.figure.clear()
 
-                        ax = self.figure.add_subplot(111)
-                        ax.set_facecolor('#4a5b67')
-                        ax.grid()
-                        ax.plot(x, y, linestyle = '-', color='#ffa1c0', label='f(x)')
-                        ax.legend(loc='upper right')
-                        ax.set_xlabel('X', fontproperties=font)
-                        ax.set_ylabel('Y', fontproperties=font)
-                        ax.fill_between(x, y, np.zeros_like(y), color='#bd305b')
+            ax = self.figure.add_subplot(111)
+            ax.set_facecolor('#4a5b67')
+            ax.grid()
+            ax.plot(x, y, linestyle='-', color='#ffa1c0', label='f(x)')
+            ax.legend(loc='upper right')
+            ax.set_xlabel('X', fontproperties=font)
+            ax.set_ylabel('Y', fontproperties=font)
+            ax.fill_between(x, y, np.zeros_like(y), color='#bd305b')
 
-                        self.canvas.draw()
+            self.canvas.draw()
+
+        except EquationError:
+            self.integral_methods.error_messageBox('Неверно указано уравнение функции!')
+        except ParametersError:
+            self.integral_methods.error_messageBox('Неверно указаны параметры интеграла!')
 
 app = QApplication([])
 p = MainWindow()
