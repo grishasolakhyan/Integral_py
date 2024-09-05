@@ -12,6 +12,8 @@ from PyQt5.QtWidgets import QMessageBox, QLabel, QSlider, QWidget, QApplication,
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QTextOption
 
+class MainError(Exception): pass
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -225,15 +227,6 @@ class Integral_Methods():
         else:
             return True
 
-    def error_messageBox(self, error_description):
-        error_equa = QMessageBox()
-        error_equa.setWindowTitle("Ошибка")
-        error_equa.setText(error_description)
-        error_equa.setIcon(QMessageBox.Warning)
-        error_equa.setStandardButtons(QMessageBox.Close)
-        error_equa.exec_()
-        return 0
-
     def check_x_equation(self):
         x_equa = self.mainwindow.equation.toPlainText()
         print(x_equa)
@@ -264,6 +257,15 @@ class Integral_Methods():
             return True
         except ValueError:
             return False
+
+    def error_messageBox(self, error_description):
+        error_equa = QMessageBox()
+        error_equa.setWindowTitle("Ошибка")
+        error_equa.setText(error_description)
+        error_equa.setIcon(QMessageBox.Warning)
+        error_equa.setStandardButtons(QMessageBox.Close)
+        error_equa.exec_()
+        return 0
 
     def Integral(self):
         check_e_e = self.check_empty_equation()
@@ -318,16 +320,16 @@ class PlotWidget(QWidget):
         check_d_b = self.integral_methods.check_digital_borders()
 
         if check_e_e == False:
-            self.integral_methods.error_empty_equation()
+            self.integral_methods.error_messageBox('Не указано уравнение функции!')
         else:
             if check_x_e == False:
-                self.integral_methods.error_x_equation()
+                self.integral_methods.error_messageBox('Неверный формат уравнения!')
             else:
                 if check_e_b == False:
-                    self.integral_methods.error_empty_borders()
+                    self.integral_methods_methods.error_messageBox('Не указаны границы интеграла!')
                 else:
                     if check_d_b == False:
-                        self.integral_methods.error_digital_borders()
+                        self.integral_methods.error_messageBox('Неверно указаны границы интеграла!')
                     else:
                         font = FontProperties()
                         font.set_family('serif')
