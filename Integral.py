@@ -234,7 +234,7 @@ class Integral_Methods():
             raise EquationError()
         elif not c_A or not c_B or c_A.isspace() or c_B.isspace(): # если не указаны границы интеграла
             raise ParametersError()
-        elif c_A.isdigit() == False or c_B.isdigit() == False: # если неверно указаны границы интеграла
+        elif float(c_A) == False or float(c_B) == False: # если неверно указаны границы интеграла
             raise ParametersError()
 
     def error_messageBox(self, error_description):
@@ -244,6 +244,7 @@ class Integral_Methods():
         error_equa.setIcon(QMessageBox.Warning)
         error_equa.setStandardButtons(QMessageBox.Close)
         error_equa.exec_()
+
         return 0
 
     def Integral(self):
