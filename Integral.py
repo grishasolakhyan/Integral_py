@@ -8,69 +8,63 @@ from matplotlib.figure import Figure
 from matplotlib.font_manager import FontProperties
 
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QMessageBox, QLabel, QSlider, QWidget, QApplication, QPushButton, QMainWindow, QHBoxLayout, QVBoxLayout, QTextEdit
+from PyQt5.QtWidgets import QMessageBox, QLabel, QSlider, QWidget, QApplication, QPushButton, QMainWindow, QHBoxLayout, QVBoxLayout, QTextEdit, QSplitter, QFrame
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QTextOption
 
 class ParametersError(Exception): pass
 class EquationError(Exception): pass
 
-class MainWindow(QMainWindow):
+class MainWindow(QWidget):
     def __init__(self):
         super(MainWindow, self).__init__()
 
         self.initUi()
         self.connectUi()
         self.update_NumSeg()
-        # self.setFixedSize(1000, 700)
+        self.setFixedSize(1280, 720)
 
     def initUi(self):
-        self.centralWidget = QWidget(self)
+        self.main_layout = QVBoxLayout()
+        self.splitter_1 = QSplitter(Qt.Horizontal)
+        self.setWindowTitle('Integral')
+
         self.integral_methods = Integral_Methods(self)
         self.plotWidget = PlotWidget(self.integral_methods)
 
-        self.H1 = QHBoxLayout(self.centralWidget)
-        self.H2 = QHBoxLayout(self.centralWidget)
-        self.H3 = QHBoxLayout(self.centralWidget)
-        self.H4 = QHBoxLayout(self.centralWidget)
-        self.H5 = QHBoxLayout(self.centralWidget)
-        self.H6 = QHBoxLayout(self.centralWidget)
-        self.H7 = QHBoxLayout(self.centralWidget)
-        self.H8 = QHBoxLayout(self.centralWidget)
-
-        self.V1 = QVBoxLayout(self.centralWidget)
-        self.V2 = QVBoxLayout(self.centralWidget)
-        self.V3 = QVBoxLayout(self.centralWidget)
-        self.V4 = QVBoxLayout(self.centralWidget)
-        self.V5 = QVBoxLayout(self.centralWidget)
-        self.V6 = QVBoxLayout(self.centralWidget)
-        self.V7 = QVBoxLayout(self.centralWidget)
-
         self.btn_graph = QPushButton('Построить график')
-        self.btn_graph.setFixedWidth(150)
+        self.btn_graph.setFixedHeight(24)
 
         self.btn_integral = QPushButton('Вычислить')
-        self.btn_integral.setFixedWidth(150)
+        self.btn_integral.setFixedHeight(24)
 
         self.equation = QTextEdit(self)
-        self.equation.setFixedSize(150, 24)
+        self.equation.setFixedHeight(24)
         self.equation.setWordWrapMode(QTextOption.NoWrap)
-
         self.tit_equation = QLabel('Уравнение f(x)')
+        self.equation_layout = QHBoxLayout()
+        self.equation_layout.addWidget(self.tit_equation)
+        self.equation_layout.addWidget(self.equation)
 
         self.Xa = QTextEdit()
-        self.Xa.setFixedSize(150, 24)
+        self.Xa.setFixedHeight(24)
         self.tit_Xa = QLabel('Левая граница')
+        self.Xa_layout = QHBoxLayout()
+        self.Xa_layout.addWidget(self.tit_Xa)
+        self.Xa_layout.addWidget(self.Xa)
 
         self.Xb = QTextEdit()
-        self.Xb.setFixedSize(150, 24)
+        self.Xb.setFixedHeight(24)
         self.tit_Xb = QLabel('Правая граница')
+        self.Xb_layout = QHBoxLayout()
+        self.Xb_layout.addWidget(self.tit_Xb)
+        self.Xb_layout.addWidget(self.Xb)
 
         min_seg = 2
         max_seg = 100
         self.num_seg = QSlider()
         self.num_seg.setOrientation(Qt.Horizontal)
-        self.num_seg.setFixedWidth(150)
+        # self.num_seg.setFixedWidth(150)
         self.num_seg.setRange(min_seg, max_seg)
         self.num_seg.setObjectName("num_seg")
         self.num_seg.setTickInterval(10)
@@ -79,68 +73,58 @@ class MainWindow(QMainWindow):
         self.num_seg.setValue(min_seg)
         self.tit_num_seg = QLabel('Число разбиений')
         self.text_num_seg = QLabel('1')
+        self.text_num_seg.setFixedHeight(24)
+        self.num_seg_layout = QHBoxLayout()
+        self.num_seg_layout.addWidget(self.tit_num_seg)
+        self.num_seg_layout.addWidget(self.num_seg)
+        self.num_seg_layout.addWidget(self.text_num_seg)
 
         self.res_rect = QTextEdit()
-        self.res_rect.setFixedSize(150, 24)
+        self.res_rect.setFixedHeight(24)
         self.tit_res_rect = QLabel('Метод прямоугольников')
+        self.res_rect_layout = QHBoxLayout()
+        self.res_rect_layout.addWidget(self.tit_res_rect)
+        self.res_rect_layout.addWidget(self.res_rect)
 
         self.res_trap = QTextEdit()
-        self.res_trap.setFixedSize(150, 24)
+        self.res_trap.setFixedHeight(24)
         self.tit_res_trap = QLabel('Метод трапеций')
+        self.res_trap_layout = QHBoxLayout()
+        self.res_trap_layout.addWidget(self.tit_res_trap)
+        self.res_trap_layout.addWidget(self.res_trap)
 
         self.res_Simp = QTextEdit()
-        self.res_Simp.setFixedSize(150, 24)
+        self.res_Simp.setFixedHeight(24)
         self.tit_res_Simp = QLabel('Метод Симпсона')
+        self.res_Simp_layout = QHBoxLayout()
+        self.res_Simp_layout.addWidget(self.tit_res_Simp)
+        self.res_Simp_layout.addWidget(self.res_Simp)
 
-        self.H6.addWidget(self.res_rect)
-        self.H6.addWidget(self.tit_res_rect)
+        # Group 1
+        self.parameters_group = QFrame()
+        self.parameters_group_layout = QVBoxLayout()
+        self.parameters_group_layout.addLayout(self.equation_layout)
+        self.parameters_group_layout.addLayout(self.Xa_layout)
+        self.parameters_group_layout.addLayout(self.Xb_layout)
+        self.parameters_group_layout.addLayout(self.num_seg_layout)
+        self.parameters_group_layout.addWidget(self.btn_integral)
+        self.parameters_group_layout.addWidget(self.btn_graph)
+        self.parameters_group_layout.addLayout(self.res_rect_layout)
+        self.parameters_group_layout.addLayout(self.res_trap_layout)
+        self.parameters_group_layout.addLayout(self.res_Simp_layout)
+        self.parameters_group.setLayout(self.parameters_group_layout)
 
-        self.H7.addWidget(self.res_trap)
-        self.H7.addWidget(self.tit_res_trap)
+        # Group 2
+        self.plot_widget_group = QFrame()
+        self.plot_widget_group_layout = QVBoxLayout()
+        self.plot_widget_group_layout.addWidget(self.plotWidget)
+        self.plot_widget_group.setLayout(self.plot_widget_group_layout)
 
-        self.H8.addWidget(self.res_Simp)
-        self.H8.addWidget(self.tit_res_Simp)
+        self.splitter_1.addWidget(self.plot_widget_group)
+        self.splitter_1.addWidget(self.parameters_group)
 
-        self.V7.addLayout(self.H6)
-        self.V7.addLayout(self.H7)
-        self.V7.addLayout(self.H8)
-
-        self.V6.addWidget(self.btn_graph)
-        self.V6.addWidget(self.btn_integral)
-
-        self.V3.addLayout(self.V6)
-        self.V3.addLayout(self.V7)
-
-        self.H2.addWidget(self.equation)
-        self.H2.addWidget(self.tit_equation)
-
-        self.H3.addWidget(self.Xa)
-        self.H3.addWidget(self.tit_Xa)
-
-        self.H4.addWidget(self.Xb)
-        self.H4.addWidget(self.tit_Xb)
-
-        self.V4.addLayout(self.H2)
-        self.V4.addLayout(self.H3)
-        self.V4.addLayout(self.H4)
-
-        self.H5.addWidget(self.num_seg)
-        self.H5.addWidget(self.text_num_seg)
-
-        self.V5.addLayout(self.H5)
-        self.V5.addWidget(self.tit_num_seg)
-        self.V5.setAlignment(Qt.AlignTop)
-
-        self.V2.addLayout(self.V4)
-        self.V2.addLayout(self.V5)
-
-        self.V1.addLayout(self.V2)
-        self.V1.addLayout(self.V3)
-
-        self.H1.addWidget(self.plotWidget)
-        self.H1.addLayout(self.V1)
-
-        self.setCentralWidget(self.centralWidget)
+        self.main_layout.addWidget(self.splitter_1)
+        self.setLayout(self.main_layout)
 
     def update_NumSeg(self):
         self.text_num_seg.setText(str(self.num_seg.value()))
