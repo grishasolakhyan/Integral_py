@@ -8,7 +8,7 @@ from matplotlib.figure import Figure
 from matplotlib.font_manager import FontProperties
 
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QMessageBox, QLabel, QSlider, QWidget, QApplication, QPushButton, QMainWindow, QHBoxLayout, QVBoxLayout, QTextEdit, QSplitter, QFrame
+from PyQt5.QtWidgets import QMessageBox, QLabel, QSlider, QWidget, QApplication, QPushButton, QHBoxLayout, QVBoxLayout, QTextEdit, QSplitter, QFrame
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QTextOption
 
@@ -40,20 +40,24 @@ class MainWindow(QWidget):
 
         self.equation = QTextEdit(self)
         self.equation.setFixedHeight(24)
+        self.equation.setMaximumWidth(150)
+        self.equation.setAlignment(Qt.AlignLeft)
         self.equation.setWordWrapMode(QTextOption.NoWrap)
-        self.equation_layout = QHBoxLayout()
+        self.equation_layout = QVBoxLayout()
         self.equation_layout.addWidget(QLabel('Уравнение f(x)'))
         self.equation_layout.addWidget(self.equation)
 
         self.Xa = QTextEdit()
         self.Xa.setFixedHeight(24)
-        self.Xa_layout = QHBoxLayout()
+        self.Xa.setMaximumWidth(150)
+        self.Xa_layout = QVBoxLayout()
         self.Xa_layout.addWidget(QLabel('Левая граница'))
         self.Xa_layout.addWidget(self.Xa)
 
         self.Xb = QTextEdit()
         self.Xb.setFixedHeight(24)
-        self.Xb_layout = QHBoxLayout()
+        self.Xb.setMaximumWidth(150)
+        self.Xb_layout = QVBoxLayout()
         self.Xb_layout.addWidget(QLabel('Правая граница'))
         self.Xb_layout.addWidget(self.Xb)
 
@@ -68,29 +72,31 @@ class MainWindow(QWidget):
         self.num_seg.setSingleStep(5)
         self.num_seg.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.num_seg.setValue(min_seg)
+        self.num_seg.setMaximumWidth(150)
         self.text_num_seg = QLabel('1')
         self.text_num_seg.setFixedHeight(24)
-        self.num_seg_layout = QHBoxLayout()
+        self.num_seg_layout = QVBoxLayout()
+        self.num_seg_widget_layout = QHBoxLayout()
+        self.num_seg_widget_layout.addWidget(self.num_seg)
+        self.num_seg_widget_layout.addWidget(self.text_num_seg)
         self.num_seg_layout.addWidget(QLabel('Число разбиений'))
-        self.num_seg_layout.addWidget(self.num_seg)
-        self.num_seg_layout.addWidget(self.text_num_seg)
+        self.num_seg_layout.addLayout(self.num_seg_widget_layout)
 
         self.res_rect = QTextEdit()
         self.res_rect.setFixedHeight(24)
-        self.res_rect_layout = QHBoxLayout()
+        self.res_rect_layout = QVBoxLayout()
         self.res_rect_layout.addWidget(QLabel('Метод прямоугольников'))
         self.res_rect_layout.addWidget(self.res_rect)
 
-
         self.res_trap = QTextEdit()
         self.res_trap.setFixedHeight(24)
-        self.res_trap_layout = QHBoxLayout()
+        self.res_trap_layout = QVBoxLayout()
         self.res_trap_layout.addWidget(QLabel('Метод трапеций'))
         self.res_trap_layout.addWidget(self.res_trap)
 
         self.res_Simp = QTextEdit()
         self.res_Simp.setFixedHeight(24)
-        self.res_Simp_layout = QHBoxLayout()
+        self.res_Simp_layout = QVBoxLayout()
         self.res_Simp_layout.addWidget(QLabel('Метод Симпсона'))
         self.res_Simp_layout.addWidget(self.res_Simp)
 
@@ -126,6 +132,7 @@ class MainWindow(QWidget):
         self.parameters_group_layout.addLayout(self.button_layout)
         self.parameters_group_layout.addLayout(self.output_layout)
         self.parameters_group.setLayout(self.parameters_group_layout)
+        self.parameters_group.setMaximumWidth(500)
 
         # Group 2
         self.plot_widget_group = QFrame()
