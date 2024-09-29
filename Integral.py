@@ -7,13 +7,20 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from matplotlib.figure import Figure
 from matplotlib.font_manager import FontProperties
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QMessageBox, QLabel, QSlider, QWidget, QApplication, QPushButton, QHBoxLayout, QVBoxLayout, QTextEdit, QSplitter, QFrame
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QTextOption
 
 class ParametersError(Exception): pass
 class EquationError(Exception): pass
+
+class Buttons():
+    def button_style(self, button_text, a, b, back_col, text_col):
+        self.btn = QtWidgets.QPushButton(button_text)
+        self.btn.setFixedSize(a, b)
+        self.btn.setStyleSheet(f'border-radius: {2}; background-color: {back_col}; color: {text_col};')
+        return self.btn
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -32,33 +39,40 @@ class MainWindow(QWidget):
         self.integral_methods = Integral_Methods(self)
         self.plotWidget = PlotWidget(self.integral_methods)
 
-        self.btn_graph = QPushButton('Построить график')
-        self.btn_graph.setFixedHeight(24)
+        self.button_object = Buttons()
 
-        self.btn_integral = QPushButton('Вычислить')
-        self.btn_integral.setFixedHeight(24)
+        self.button_object.button_style('Построить график', 24, 100, 'blue', 'orange')
 
-        self.equation = QTextEdit(self)
+        self.btn_graph = self.button_object.button_style('Построить график', 100, 30, 'skyblue', 'red')
+        self.btn_integral = self.button_object.button_style('Вычислить', 100, 30, 'skyblue', 'red')
+
+        self.equation = QTextEdit()
         self.equation.setFixedHeight(24)
-        self.equation.setMaximumWidth(150)
-        self.equation.setAlignment(Qt.AlignLeft)
         self.equation.setWordWrapMode(QTextOption.NoWrap)
         self.equation_layout = QVBoxLayout()
-        self.equation_layout.addWidget(QLabel('Уравнение f(x)'))
+        self.equation_label = QLabel('Уравнение f(x)')
+        self.equation_label.setFixedHeight(30)
+        self.equation_label_layout = QVBoxLayout().addWidget(self.equation_label)
+        print(self.equation_label.size())
+        self.equation_layout.addWidget(self.equation_label)
         self.equation_layout.addWidget(self.equation)
 
         self.Xa = QTextEdit()
         self.Xa.setFixedHeight(24)
         self.Xa.setMaximumWidth(150)
         self.Xa_layout = QVBoxLayout()
-        self.Xa_layout.addWidget(QLabel('Левая граница'))
+        self.Xa_label = QLabel('Левая граница')
+        self.Xa_label.setFixedHeight(30)
+        self.Xa_layout.addWidget(self.Xa_label)
         self.Xa_layout.addWidget(self.Xa)
 
         self.Xb = QTextEdit()
         self.Xb.setFixedHeight(24)
         self.Xb.setMaximumWidth(150)
         self.Xb_layout = QVBoxLayout()
-        self.Xb_layout.addWidget(QLabel('Правая граница'))
+        self.Xb_label = QLabel('Правая граница')
+        self.Xb_label.setFixedHeight(30)
+        self.Xb_layout.addWidget(self.Xb_label)
         self.Xb_layout.addWidget(self.Xb)
 
         min_seg = 2
@@ -79,29 +93,39 @@ class MainWindow(QWidget):
         self.num_seg_widget_layout = QHBoxLayout()
         self.num_seg_widget_layout.addWidget(self.num_seg)
         self.num_seg_widget_layout.addWidget(self.text_num_seg)
-        self.num_seg_layout.addWidget(QLabel('Число разбиений'))
+        self.num_seg_label = QLabel('Число разбиений')
+        self.num_seg_label.setFixedHeight(30)
+        self.num_seg_layout.addWidget(self.num_seg_label)
         self.num_seg_layout.addLayout(self.num_seg_widget_layout)
 
         self.res_rect = QTextEdit()
         self.res_rect.setFixedHeight(24)
         self.res_rect_layout = QVBoxLayout()
-        self.res_rect_layout.addWidget(QLabel('Метод прямоугольников'))
+        self.res_rect_label = QLabel('Метод прямоугольников')
+        self.res_rect_label.setFixedHeight(30)
+        self.res_rect_layout.addWidget(self.res_rect_label)
         self.res_rect_layout.addWidget(self.res_rect)
 
         self.res_trap = QTextEdit()
         self.res_trap.setFixedHeight(24)
         self.res_trap_layout = QVBoxLayout()
-        self.res_trap_layout.addWidget(QLabel('Метод трапеций'))
+        self.res_trap_label = QLabel('Метод трапеции')
+        self.res_trap_label.setFixedHeight(30)
+        self.res_trap_layout.addWidget(self.res_trap_label)
         self.res_trap_layout.addWidget(self.res_trap)
 
         self.res_Simp = QTextEdit()
         self.res_Simp.setFixedHeight(24)
         self.res_Simp_layout = QVBoxLayout()
-        self.res_Simp_layout.addWidget(QLabel('Метод Симпсона'))
+        self.res_Simp_label = QLabel('Метод Симпсона')
+        self.res_Simp_label.setFixedHeight(30)
+        self.res_Simp_layout.addWidget(self.res_Simp_label)
         self.res_Simp_layout.addWidget(self.res_Simp)
 
         self.input_layout = QVBoxLayout()
-        self.button_layout = QVBoxLayout()
+        self.input_layout.setAlignment(Qt.AlignTop)
+        self.button_layout = QHBoxLayout()
+        self.button_layout.setAlignment(Qt.AlignLeft)
         self.output_layout = QVBoxLayout()
 
         self.input_layout.addLayout(self.equation_layout)
@@ -118,30 +142,24 @@ class MainWindow(QWidget):
 
         # Group 1
         self.parameters_group = QFrame()
+        self.parameters_group.setStyleSheet(f'border-radius: {6}; border :1px solid blue;')
         self.parameters_group_layout = QVBoxLayout()
-        # self.parameters_group_layout.addLayout(self.equation_layout)
-        # self.parameters_group_layout.addLayout(self.Xa_layout)
-        # self.parameters_group_layout.addLayout(self.Xb_layout)
-        # self.parameters_group_layout.addLayout(self.num_seg_layout)
-        # self.parameters_group_layout.addWidget(self.btn_integral)
-        # self.parameters_group_layout.addWidget(self.btn_graph)
-        # self.parameters_group_layout.addLayout(self.res_rect_layout)
-        # self.parameters_group_layout.addLayout(self.res_trap_layout)
-        # self.parameters_group_layout.addLayout(self.res_Simp_layout)
         self.parameters_group_layout.addLayout(self.input_layout)
         self.parameters_group_layout.addLayout(self.button_layout)
         self.parameters_group_layout.addLayout(self.output_layout)
         self.parameters_group.setLayout(self.parameters_group_layout)
-        self.parameters_group.setMaximumWidth(500)
 
         # Group 2
         self.plot_widget_group = QFrame()
+        self.plot_widget_group.setStyleSheet(f'border-radius: {6}; border :1px solid orange;')
         self.plot_widget_group_layout = QVBoxLayout()
         self.plot_widget_group_layout.addWidget(self.plotWidget)
         self.plot_widget_group.setLayout(self.plot_widget_group_layout)
 
+
         self.splitter_1.addWidget(self.plot_widget_group)
         self.splitter_1.addWidget(self.parameters_group)
+        self.splitter_1.setStretchFactor(2, 1)
 
         self.main_layout.addWidget(self.splitter_1)
         self.setLayout(self.main_layout)
@@ -321,8 +339,8 @@ class PlotWidget(QWidget):
         except ParametersError:
             self.integral_methods.error_messageBox('Неверно указаны параметры интеграла!')
 
-app = QApplication([])
-p = MainWindow()
-p.show()
-
-sys.exit(app.exec_())
+if __name__ == '__main__':
+    app = QApplication([])
+    p = MainWindow()
+    p.show()
+    sys.exit(app.exec_())
