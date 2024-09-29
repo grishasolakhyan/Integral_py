@@ -17,10 +17,16 @@ class EquationError(Exception): pass
 
 class Buttons():
     def button_style(self, button_text, a, b, back_col, text_col):
-        self.btn = QtWidgets.QPushButton(button_text)
+        self.btn = QPushButton(button_text)
         self.btn.setFixedSize(a, b)
         self.btn.setStyleSheet(f'border-radius: {2}; background-color: {back_col}; color: {text_col};')
         return self.btn
+
+class Labels():
+    def label_style(self, label_text):
+        self.lbl = QLabel(label_text)
+        self.lbl.setFixedHeight(30)
+        return self.lbl
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -40,18 +46,23 @@ class MainWindow(QWidget):
         self.plotWidget = PlotWidget(self.integral_methods)
 
         self.button_object = Buttons()
-
-        self.button_object.button_style('Построить график', 24, 100, 'blue', 'orange')
+        self.label_object = Labels()
 
         self.btn_graph = self.button_object.button_style('Построить график', 100, 30, 'skyblue', 'red')
         self.btn_integral = self.button_object.button_style('Вычислить', 100, 30, 'skyblue', 'red')
+
+        self.equation_label = self.label_object.label_style('Уравнение')
+        self.Xa_label = self.label_object.label_style('Левая граница')
+        self.Xb_label = self.label_object.label_style('Правая граница')
+        self.num_seg_label = self.label_object.label_style('Число разбиений')
+        self.res_rect_label = self.label_object.label_style('Метод прямоугольников')
+        self.res_trap_label = self.label_object.label_style('Метод трапеции')
+        self.res_Simp_label = self.label_object.label_style('Метод Симпсона')
 
         self.equation = QTextEdit()
         self.equation.setFixedHeight(24)
         self.equation.setWordWrapMode(QTextOption.NoWrap)
         self.equation_layout = QVBoxLayout()
-        self.equation_label = QLabel('Уравнение f(x)')
-        self.equation_label.setFixedHeight(30)
         self.equation_label_layout = QVBoxLayout().addWidget(self.equation_label)
         print(self.equation_label.size())
         self.equation_layout.addWidget(self.equation_label)
@@ -61,8 +72,6 @@ class MainWindow(QWidget):
         self.Xa.setFixedHeight(24)
         self.Xa.setMaximumWidth(150)
         self.Xa_layout = QVBoxLayout()
-        self.Xa_label = QLabel('Левая граница')
-        self.Xa_label.setFixedHeight(30)
         self.Xa_layout.addWidget(self.Xa_label)
         self.Xa_layout.addWidget(self.Xa)
 
@@ -70,8 +79,6 @@ class MainWindow(QWidget):
         self.Xb.setFixedHeight(24)
         self.Xb.setMaximumWidth(150)
         self.Xb_layout = QVBoxLayout()
-        self.Xb_label = QLabel('Правая граница')
-        self.Xb_label.setFixedHeight(30)
         self.Xb_layout.addWidget(self.Xb_label)
         self.Xb_layout.addWidget(self.Xb)
 
@@ -93,32 +100,24 @@ class MainWindow(QWidget):
         self.num_seg_widget_layout = QHBoxLayout()
         self.num_seg_widget_layout.addWidget(self.num_seg)
         self.num_seg_widget_layout.addWidget(self.text_num_seg)
-        self.num_seg_label = QLabel('Число разбиений')
-        self.num_seg_label.setFixedHeight(30)
         self.num_seg_layout.addWidget(self.num_seg_label)
         self.num_seg_layout.addLayout(self.num_seg_widget_layout)
 
         self.res_rect = QTextEdit()
         self.res_rect.setFixedHeight(24)
         self.res_rect_layout = QVBoxLayout()
-        self.res_rect_label = QLabel('Метод прямоугольников')
-        self.res_rect_label.setFixedHeight(30)
         self.res_rect_layout.addWidget(self.res_rect_label)
         self.res_rect_layout.addWidget(self.res_rect)
 
         self.res_trap = QTextEdit()
         self.res_trap.setFixedHeight(24)
         self.res_trap_layout = QVBoxLayout()
-        self.res_trap_label = QLabel('Метод трапеции')
-        self.res_trap_label.setFixedHeight(30)
         self.res_trap_layout.addWidget(self.res_trap_label)
         self.res_trap_layout.addWidget(self.res_trap)
 
         self.res_Simp = QTextEdit()
         self.res_Simp.setFixedHeight(24)
         self.res_Simp_layout = QVBoxLayout()
-        self.res_Simp_label = QLabel('Метод Симпсона')
-        self.res_Simp_label.setFixedHeight(30)
         self.res_Simp_layout.addWidget(self.res_Simp_label)
         self.res_Simp_layout.addWidget(self.res_Simp)
 
