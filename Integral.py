@@ -16,18 +16,26 @@ class ParametersError(Exception): pass
 class EquationError(Exception): pass
 
 class AddWidgets():
-    def button_object(self, button_text, a, b, back_col, text_col):
+    def button_object(self, button_text):
         self.btn = QPushButton(button_text)
-        self.btn.setFixedSize(a, b)
+        self.btn.setFixedSize(100, 30)
         self.btn.setFont(self.font_style())
-        self.btn.setStyleSheet(f'border-radius: {2}; background-color: {back_col}; color: {text_col};')
+        self.btn.setStyleSheet(f'border-radius: {3}; background-color: {"#ef233c"}; color: {"white"};')
         return self.btn
 
     def label_object(self, label_text):
         self.lbl = QLabel(label_text)
         self.lbl.setFixedHeight(30)
         self.lbl.setFont(self.font_style())
+        self.lbl.setStyleSheet(f'color: {"white"}')
         return self.lbl
+
+    def textedit_object(self):
+        txt_edt = QTextEdit()
+        txt_edt.setFixedHeight(24)
+        txt_edt.setMaximumWidth(150)
+        txt_edt.setStyleSheet(f'background:{"white"}')
+        return txt_edt
 
     def font_style(self):
         new_font = QtGui.QFont()
@@ -50,19 +58,21 @@ class MainWindow(QWidget):
         self.main_layout = QVBoxLayout()
         self.splitter_1 = QSplitter(Qt.Horizontal)
         self.setWindowTitle('Integral')
+        self.setStyleSheet(f'background-color: {"#2b2d42"}')
 
         self.integral_methods = Integral_Methods(self)
         self.plotWidget = PlotWidget(self.integral_methods)
 
         self.addwidget = AddWidgets()
 
-        self.btn_graph = self.addwidget.button_object('Построить график', 100, 30, 'skyblue', 'red')
-        self.btn_integral = self.addwidget.button_object('Вычислить', 100, 30, 'skyblue', 'red')
+        self.btn_graph = self.addwidget.button_object('Построить график')
+        self.btn_integral = self.addwidget.button_object('Вычислить')
 
         self.equation_label = self.addwidget.label_object('Уравнение')
         self.Xa_label = self.addwidget.label_object('Левая граница')
         self.Xb_label = self.addwidget.label_object('Правая граница')
         self.num_seg_label = self.addwidget.label_object('Число разбиений')
+        self.text_num_seg = self.addwidget.label_object('1')
         self.res_rect_label = self.addwidget.label_object('Метод прямоугольников')
         self.res_trap_label = self.addwidget.label_object('Метод трапеции')
         self.res_Simp_label = self.addwidget.label_object('Метод Симпсона')
@@ -75,28 +85,25 @@ class MainWindow(QWidget):
         self.res_trap_layout = QVBoxLayout()
         self.res_Simp_layout = QVBoxLayout()
         self.input_layout = QVBoxLayout()
-        self.input_layout.setAlignment(Qt.AlignTop)
+        self.input_layout.setAlignment(Qt.AlignLeft)
         self.button_layout = QHBoxLayout()
         self.button_layout.setAlignment(Qt.AlignLeft)
         self.output_layout = QVBoxLayout()
+        self.output_layout.setAlignment(Qt.AlignLeft)
 
-        self.equation = QTextEdit()
-        self.equation.setFixedHeight(24)
-        self.equation.setWordWrapMode(QTextOption.NoWrap)
-        self.equation_label_layout = QVBoxLayout().addWidget(self.equation_label)
-        print(self.equation_label.size())
+        self.equation = self.addwidget.textedit_object()
+        self.Xa = self.addwidget.textedit_object()
+        self.Xb = self.addwidget.textedit_object()
+        self.res_rect = self.addwidget.textedit_object()
+        self.res_trap = self.addwidget.textedit_object()
+        self.res_Simp = self.addwidget.textedit_object()
+
         self.equation_layout.addWidget(self.equation_label)
         self.equation_layout.addWidget(self.equation)
 
-        self.Xa = QTextEdit()
-        self.Xa.setFixedHeight(24)
-        self.Xa.setMaximumWidth(150)
         self.Xa_layout.addWidget(self.Xa_label)
         self.Xa_layout.addWidget(self.Xa)
 
-        self.Xb = QTextEdit()
-        self.Xb.setFixedHeight(24)
-        self.Xb.setMaximumWidth(150)
         self.Xb_layout.addWidget(self.Xb_label)
         self.Xb_layout.addWidget(self.Xb)
 
@@ -112,28 +119,11 @@ class MainWindow(QWidget):
         self.num_seg.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.num_seg.setValue(min_seg)
         self.num_seg.setMaximumWidth(150)
-        self.text_num_seg = QLabel('1')
-        self.text_num_seg.setFixedHeight(24)
         self.num_seg_widget_layout = QHBoxLayout()
         self.num_seg_widget_layout.addWidget(self.num_seg)
         self.num_seg_widget_layout.addWidget(self.text_num_seg)
         self.num_seg_layout.addWidget(self.num_seg_label)
         self.num_seg_layout.addLayout(self.num_seg_widget_layout)
-
-        self.res_rect = QTextEdit()
-        self.res_rect.setFixedHeight(24)
-        self.res_rect_layout.addWidget(self.res_rect_label)
-        self.res_rect_layout.addWidget(self.res_rect)
-
-        self.res_trap = QTextEdit()
-        self.res_trap.setFixedHeight(24)
-        self.res_trap_layout.addWidget(self.res_trap_label)
-        self.res_trap_layout.addWidget(self.res_trap)
-
-        self.res_Simp = QTextEdit()
-        self.res_Simp.setFixedHeight(24)
-        self.res_Simp_layout.addWidget(self.res_Simp_label)
-        self.res_Simp_layout.addWidget(self.res_Simp)
 
         self.input_layout.addLayout(self.equation_layout)
         self.input_layout.addLayout(self.Xa_layout)
@@ -143,13 +133,22 @@ class MainWindow(QWidget):
         self.button_layout.addWidget(self.btn_integral)
         self.button_layout.addWidget(self.btn_graph)
 
+        self.res_rect_layout.addWidget(self.res_rect_label)
+        self.res_rect_layout.addWidget(self.res_rect)
+
+        self.res_trap_layout.addWidget(self.res_trap_label)
+        self.res_trap_layout.addWidget(self.res_trap)
+
+        self.res_Simp_layout.addWidget(self.res_Simp_label)
+        self.res_Simp_layout.addWidget(self.res_Simp)
+
         self.output_layout.addLayout(self.res_rect_layout)
         self.output_layout.addLayout(self.res_trap_layout)
         self.output_layout.addLayout(self.res_Simp_layout)
 
         # Group 1 (parameters menu)
         self.parameters_group = QFrame()
-        self.parameters_group.setStyleSheet(f'border-radius: {6}; border :1px solid blue;')
+        self.parameters_group.setStyleSheet(f'border-radius: {6}; background: #8d99ae;')
         self.parameters_group_layout = QVBoxLayout()
         self.parameters_group_layout.addLayout(self.input_layout)
         self.parameters_group_layout.addLayout(self.button_layout)
@@ -158,7 +157,7 @@ class MainWindow(QWidget):
 
         # Group 2 (plot widget menu)
         self.plot_widget_group = QFrame()
-        self.plot_widget_group.setStyleSheet(f'border-radius: {6}; border :1px solid orange;')
+        self.plot_widget_group.setStyleSheet(f'border-radius: {6}; background: #8d99ae;')
         self.plot_widget_group_layout = QVBoxLayout()
         self.plot_widget_group_layout.addWidget(self.plotWidget)
         self.plot_widget_group.setLayout(self.plot_widget_group_layout)
