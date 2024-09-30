@@ -27,7 +27,7 @@ class AddWidgets():
         self.lbl.setFixedHeight(30)
         font_style = QtGui.QFont()
         font_style.setFamily('Franklin Gothic Medium Cond')
-        font_style.setPointSize(12)
+        font_style.setPointSize(10)
         font_style.setBold(False)
         font_style.setWeight(10)
         self.lbl.setFont(font_style)
@@ -63,10 +63,22 @@ class MainWindow(QWidget):
         self.res_trap_label = self.addwidget.label_object('Метод трапеции')
         self.res_Simp_label = self.addwidget.label_object('Метод Симпсона')
 
+        self.equation_layout = QVBoxLayout()
+        self.Xa_layout = QVBoxLayout()
+        self.Xb_layout = QVBoxLayout()
+        self.num_seg_layout = QVBoxLayout()
+        self.res_rect_layout = QVBoxLayout()
+        self.res_trap_layout = QVBoxLayout()
+        self.res_Simp_layout = QVBoxLayout()
+        self.input_layout = QVBoxLayout()
+        self.input_layout.setAlignment(Qt.AlignTop)
+        self.button_layout = QHBoxLayout()
+        self.button_layout.setAlignment(Qt.AlignLeft)
+        self.output_layout = QVBoxLayout()
+
         self.equation = QTextEdit()
         self.equation.setFixedHeight(24)
         self.equation.setWordWrapMode(QTextOption.NoWrap)
-        self.equation_layout = QVBoxLayout()
         self.equation_label_layout = QVBoxLayout().addWidget(self.equation_label)
         print(self.equation_label.size())
         self.equation_layout.addWidget(self.equation_label)
@@ -75,14 +87,12 @@ class MainWindow(QWidget):
         self.Xa = QTextEdit()
         self.Xa.setFixedHeight(24)
         self.Xa.setMaximumWidth(150)
-        self.Xa_layout = QVBoxLayout()
         self.Xa_layout.addWidget(self.Xa_label)
         self.Xa_layout.addWidget(self.Xa)
 
         self.Xb = QTextEdit()
         self.Xb.setFixedHeight(24)
         self.Xb.setMaximumWidth(150)
-        self.Xb_layout = QVBoxLayout()
         self.Xb_layout.addWidget(self.Xb_label)
         self.Xb_layout.addWidget(self.Xb)
 
@@ -100,7 +110,6 @@ class MainWindow(QWidget):
         self.num_seg.setMaximumWidth(150)
         self.text_num_seg = QLabel('1')
         self.text_num_seg.setFixedHeight(24)
-        self.num_seg_layout = QVBoxLayout()
         self.num_seg_widget_layout = QHBoxLayout()
         self.num_seg_widget_layout.addWidget(self.num_seg)
         self.num_seg_widget_layout.addWidget(self.text_num_seg)
@@ -109,27 +118,18 @@ class MainWindow(QWidget):
 
         self.res_rect = QTextEdit()
         self.res_rect.setFixedHeight(24)
-        self.res_rect_layout = QVBoxLayout()
         self.res_rect_layout.addWidget(self.res_rect_label)
         self.res_rect_layout.addWidget(self.res_rect)
 
         self.res_trap = QTextEdit()
         self.res_trap.setFixedHeight(24)
-        self.res_trap_layout = QVBoxLayout()
         self.res_trap_layout.addWidget(self.res_trap_label)
         self.res_trap_layout.addWidget(self.res_trap)
 
         self.res_Simp = QTextEdit()
         self.res_Simp.setFixedHeight(24)
-        self.res_Simp_layout = QVBoxLayout()
         self.res_Simp_layout.addWidget(self.res_Simp_label)
         self.res_Simp_layout.addWidget(self.res_Simp)
-
-        self.input_layout = QVBoxLayout()
-        self.input_layout.setAlignment(Qt.AlignTop)
-        self.button_layout = QHBoxLayout()
-        self.button_layout.setAlignment(Qt.AlignLeft)
-        self.output_layout = QVBoxLayout()
 
         self.input_layout.addLayout(self.equation_layout)
         self.input_layout.addLayout(self.Xa_layout)
@@ -143,7 +143,7 @@ class MainWindow(QWidget):
         self.output_layout.addLayout(self.res_trap_layout)
         self.output_layout.addLayout(self.res_Simp_layout)
 
-        # Group 1
+        # Group 1 (parameters menu)
         self.parameters_group = QFrame()
         self.parameters_group.setStyleSheet(f'border-radius: {6}; border :1px solid blue;')
         self.parameters_group_layout = QVBoxLayout()
@@ -152,7 +152,7 @@ class MainWindow(QWidget):
         self.parameters_group_layout.addLayout(self.output_layout)
         self.parameters_group.setLayout(self.parameters_group_layout)
 
-        # Group 2
+        # Group 2 (plot widget menu)
         self.plot_widget_group = QFrame()
         self.plot_widget_group.setStyleSheet(f'border-radius: {6}; border :1px solid orange;')
         self.plot_widget_group_layout = QVBoxLayout()
@@ -162,7 +162,8 @@ class MainWindow(QWidget):
 
         self.splitter_1.addWidget(self.plot_widget_group)
         self.splitter_1.addWidget(self.parameters_group)
-        self.splitter_1.setStretchFactor(2, 1)
+        self.splitter_1.setStretchFactor(0, 3)
+        self.splitter_1.setStretchFactor(1, 2)
 
         self.main_layout.addWidget(self.splitter_1)
         self.setLayout(self.main_layout)
