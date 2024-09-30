@@ -7,7 +7,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from matplotlib.figure import Figure
 from matplotlib.font_manager import FontProperties
 
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QMessageBox, QLabel, QSlider, QWidget, QApplication, QPushButton, QHBoxLayout, QVBoxLayout, QTextEdit, QSplitter, QFrame
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QTextOption
@@ -15,17 +15,22 @@ from PyQt5.QtGui import QTextOption
 class ParametersError(Exception): pass
 class EquationError(Exception): pass
 
-class Buttons():
-    def button_style(self, button_text, a, b, back_col, text_col):
+class AddWidgets():
+    def button_object(self, button_text, a, b, back_col, text_col):
         self.btn = QPushButton(button_text)
         self.btn.setFixedSize(a, b)
         self.btn.setStyleSheet(f'border-radius: {2}; background-color: {back_col}; color: {text_col};')
         return self.btn
 
-class Labels():
-    def label_style(self, label_text):
+    def label_object(self, label_text):
         self.lbl = QLabel(label_text)
         self.lbl.setFixedHeight(30)
+        font_style = QtGui.QFont()
+        font_style.setFamily('Franklin Gothic Medium Cond')
+        font_style.setPointSize(12)
+        font_style.setBold(False)
+        font_style.setWeight(10)
+        self.lbl.setFont(font_style)
         return self.lbl
 
 class MainWindow(QWidget):
@@ -45,19 +50,18 @@ class MainWindow(QWidget):
         self.integral_methods = Integral_Methods(self)
         self.plotWidget = PlotWidget(self.integral_methods)
 
-        self.button_object = Buttons()
-        self.label_object = Labels()
+        self.addwidget = AddWidgets()
 
-        self.btn_graph = self.button_object.button_style('Построить график', 100, 30, 'skyblue', 'red')
-        self.btn_integral = self.button_object.button_style('Вычислить', 100, 30, 'skyblue', 'red')
+        self.btn_graph = self.addwidget.button_object('Построить график', 100, 30, 'skyblue', 'red')
+        self.btn_integral = self.addwidget.button_object('Вычислить', 100, 30, 'skyblue', 'red')
 
-        self.equation_label = self.label_object.label_style('Уравнение')
-        self.Xa_label = self.label_object.label_style('Левая граница')
-        self.Xb_label = self.label_object.label_style('Правая граница')
-        self.num_seg_label = self.label_object.label_style('Число разбиений')
-        self.res_rect_label = self.label_object.label_style('Метод прямоугольников')
-        self.res_trap_label = self.label_object.label_style('Метод трапеции')
-        self.res_Simp_label = self.label_object.label_style('Метод Симпсона')
+        self.equation_label = self.addwidget.label_object('Уравнение')
+        self.Xa_label = self.addwidget.label_object('Левая граница')
+        self.Xb_label = self.addwidget.label_object('Правая граница')
+        self.num_seg_label = self.addwidget.label_object('Число разбиений')
+        self.res_rect_label = self.addwidget.label_object('Метод прямоугольников')
+        self.res_trap_label = self.addwidget.label_object('Метод трапеции')
+        self.res_Simp_label = self.addwidget.label_object('Метод Симпсона')
 
         self.equation = QTextEdit()
         self.equation.setFixedHeight(24)
