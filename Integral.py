@@ -19,19 +19,23 @@ class AddWidgets():
     def button_object(self, button_text, a, b, back_col, text_col):
         self.btn = QPushButton(button_text)
         self.btn.setFixedSize(a, b)
+        self.btn.setFont(self.font_style())
         self.btn.setStyleSheet(f'border-radius: {2}; background-color: {back_col}; color: {text_col};')
         return self.btn
 
     def label_object(self, label_text):
         self.lbl = QLabel(label_text)
         self.lbl.setFixedHeight(30)
-        font_style = QtGui.QFont()
-        font_style.setFamily('Franklin Gothic Medium Cond')
-        font_style.setPointSize(10)
-        font_style.setBold(False)
-        font_style.setWeight(10)
-        self.lbl.setFont(font_style)
+        self.lbl.setFont(self.font_style())
         return self.lbl
+
+    def font_style(self):
+        new_font = QtGui.QFont()
+        new_font.setFamily('Franklin Gothic Medium Cond')
+        new_font.setPointSize(10)
+        new_font.setBold(False)
+        new_font.setWeight(10)
+        return new_font
 
 class MainWindow(QWidget):
     def __init__(self):
