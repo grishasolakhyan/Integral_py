@@ -351,3 +351,4 @@ if __name__ == '__main__':
     p = MainWindow()
     p.show()
     sys.exit(app.exec_())
+#Hello, World!
