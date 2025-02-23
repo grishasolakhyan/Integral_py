@@ -253,7 +253,7 @@ class Integral_Methods():
         check_equa = self.mainwindow.equation.toPlainText()
         xa_border = self.mainwindow.Xa.toPlainText()
         xb_border = self.mainwindow.Xb.toPlainText()
-
+        
         reg = "^[0-9^.x*()/+-]+$"
         pattern = re.compile(reg)
 
@@ -282,17 +282,17 @@ class Integral_Methods():
         try:
             self.checking_parameters()
 
-            self.res_rect = self.mainwindow.res_rect
-            self.res_trap = self.mainwindow.res_trap
-            self.res_Simp = self.mainwindow.res_Simp
+            self.rectangle_textBox = self.mainwindow.res_rect
+            self.trapezium_textBox = self.mainwindow.res_trap
+            self.Simpson_textBox = self.mainwindow.res_Simp
 
-            r_res = self.rectangle()
-            t_res = self.trapezium()
-            s_res = self.Simpson()
+            rectangle_result = self.rectangle()
+            trapezium_result = self.trapezium()
+            Simpson_result = self.Simpson()
 
-            self.res_rect.setText(str(r_res))
-            self.res_trap.setText(str(t_res))
-            self.res_Simp.setText(str(s_res))
+            self.rectangle_textBox.setText(str(rectangle_result))
+            self.trapezium_textBox.setText(str(trapezium_result))
+            self.Simpson_textBox.setText(str(Simpson_result))
 
         except EquationError:
             self.error_messageBox('Неверно указано уравнение функции!')
