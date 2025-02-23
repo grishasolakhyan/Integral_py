@@ -208,24 +208,24 @@ class Integral_Methods():
         return self.ev_res
 
     def rectangle(self):
-        xa, xb = self.borders()
+        xa_border, xb_border = self.borders()
         n = self.mainwindow.update_NumSeg()
         sum = 0
-        h = (xb - xa) / n
-        btx = xa + h/2
-        while (btx < xb):
+        h = (xb_border - xa_border) / n
+        btx = xa_border + h/2
+        while (btx < xb_border):
             sum += self.func(btx)
             btx += h
 
         return sum * h
 
     def trapezium(self):
-        xa, xb = self.borders()
+        xa_border, xb_border = self.borders()
         n = self.mainwindow.update_NumSeg()
         sum = 0
-        h = (xb - xa) / n
-        btx = xa + h
-        sum = (self.func(xa) + self.func(xb)) / 2
+        h = (xb_border - xa_border) / n
+        btx = xa_border + h
+        sum = (self.func(xa_border) + self.func(xb_border)) / 2
         for i in range(1, n):
             sum += self.func(btx)
             btx += h
@@ -233,12 +233,12 @@ class Integral_Methods():
         return sum * h
 
     def Simpson(self):
-        xa, xb = self.borders()
+        xa_border, xb_border = self.borders()
         n = self.mainwindow.update_NumSeg()
         sum = 0
-        btx = xa
-        h = (xb - xa) / n
-        sum = self.func(xa) + self.func(xb)
+        btx = xa_border
+        h = (xb_border - xa_border) / n
+        sum = self.func(xa_border) + self.func(xb_border)
         sum1 = 0
         sum2 = 0
         for i in range(1, n, 2):
@@ -250,21 +250,22 @@ class Integral_Methods():
         return sum
 
     def checking_parameters(self):
-        c_equa = self.mainwindow.equation.toPlainText()
+        check_equa = self.mainwindow.equation.toPlainText()
+        xa_border = self.mainwindow.Xa.toPlainText()
+        xb_border = self.mainwindow.Xb.toPlainText()
+
         reg = "^[0-9^.x*()/+-]+$"
         pattern = re.compile(reg)
-        c_A = self.mainwindow.Xa.toPlainText()
-        c_B = self.mainwindow.Xb.toPlainText()
 
-        if not c_equa or c_equa.isspace(): # если не указано уравнение функции
+        if not check_equa or check_equa.isspace(): # если не указано уравнение функции
             raise EquationError()
-        elif pattern.search(c_equa) is None: # если неверно указано уравнение функции
+        elif pattern.search(check_equa) is None: # если неверно указано уравнение функции
             raise EquationError()
-        elif not c_A or not c_B or c_A.isspace() or c_B.isspace(): # если не указаны границы интеграла
+        elif not xa_border or not xb_border or xa_border.isspace() or xb_border.isspace(): # если не указаны границы интеграла
             print('A')
             raise ParametersError()
-        # elif float(c_A) == False or float(c_B) == False: # если неверно указаны границы интеграла
-        #     print(f'{c_A} and {c_B}')
+        # elif float(xa_border) == False or float(xb_border) == False: # если неверно указаны границы интеграла
+        #     print(f'{xa_border} and {xb_border}')
         #     raise ParametersError()
 
     def error_messageBox(self, error_description):
