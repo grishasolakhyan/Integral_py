@@ -182,8 +182,7 @@ class MainWindow(QWidget):
         self.num_seg.valueChanged.connect(self.update_NumSeg)
 
 class Integral_Methods():
-    def __init__(self, MainWindow, parent=None):
-        #super(Integral_Methods, self).__init__()
+    def __init__(self, MainWindow):
         self.mainwindow = MainWindow
 
     def borders(self): #функция границ интеграла
