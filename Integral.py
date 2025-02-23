@@ -187,18 +187,18 @@ class Integral_Methods():
         self.mainwindow = MainWindow
 
     def borders(self): #функция границ интеграла
-        self.xa = self.mainwindow.Xa
-        self.xb = self.mainwindow.Xb
+        self.xa_text = self.mainwindow.Xa.toPlainText()
+        self.xb_text = self.mainwindow.Xb.toPlainText()
 
-        self.xa = float(self.xa.toPlainText())
-        self.xb = float(self.xb.toPlainText())
+        self.xa_num = float(self.xa_text)
+        self.xb_num = float(self.xb_text)
 
-        if self.xa>self.xb:
-            xbn=self.xb
-            self.xb=self.xa
-            self.xa=xbn
+        if self.xa_num>self.xb_num:
+            xbn=self.xb_num
+            self.xb_num=self.xa_num
+            self.xa_num=xbn
 
-        return self.xa, self.xb
+        return self.xa_num, self.xb_num
 
     def func(self, x):
         self.equa = self.mainwindow.equation.toPlainText()
@@ -262,9 +262,11 @@ class Integral_Methods():
         elif pattern.search(c_equa) is None: # если неверно указано уравнение функции
             raise EquationError()
         elif not c_A or not c_B or c_A.isspace() or c_B.isspace(): # если не указаны границы интеграла
+            print('A')
             raise ParametersError()
-        elif float(c_A) == False or float(c_B) == False: # если неверно указаны границы интеграла
-            raise ParametersError()
+        # elif float(c_A) == False or float(c_B) == False: # если неверно указаны границы интеграла
+        #     print(f'{c_A} and {c_B}')
+        #     raise ParametersError()
 
     def error_messageBox(self, error_description):
         error_equa = QMessageBox()
@@ -351,4 +353,3 @@ if __name__ == '__main__':
     p = MainWindow()
     p.show()
     sys.exit(app.exec_())
-#Hello, World!
