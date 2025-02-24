@@ -253,6 +253,8 @@ class Integral_Methods():
         check_equa = self.mainwindow.equation.toPlainText()
         xa_border = self.mainwindow.Xa.toPlainText()
         xb_border = self.mainwindow.Xb.toPlainText()
+
+        print(f'{xa_border} -> {type(xa_border)}\n{xb_border} -> {type(xb_border)}')
         
         reg = "^[0-9^.x*()/+-]+$"
         pattern = re.compile(reg)
@@ -262,11 +264,11 @@ class Integral_Methods():
         elif pattern.search(check_equa) is None: # если неверно указано уравнение функции
             raise EquationError()
         elif not xa_border or not xb_border or xa_border.isspace() or xb_border.isspace(): # если не указаны границы интеграла
-            print('A')
             raise ParametersError()
-        # elif float(xa_border) == False or float(xb_border) == False: # если неверно указаны границы интеграла
-        #     print(f'{xa_border} and {xb_border}')
-        #     raise ParametersError()
+        try:
+            float(xa_border), float(xb_border)
+        except:
+            raise ParametersError()
 
     def error_messageBox(self, error_description):
         error_equa = QMessageBox()
