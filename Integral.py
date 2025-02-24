@@ -200,7 +200,7 @@ class Integral_Methods():
         return self.xa_num, self.xb_num
 
     def func(self, x):
-        self.equa = self.mainwindow.equation.toPlainText()
+        self.equa = self.mainwindow.equation.toPlainText() + ' + x * 0'
         try:
             self.ev_res = eval(self.equa)
         except ZeroDivisionError:
